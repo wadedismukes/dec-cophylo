@@ -1,0 +1,4 @@
+*.tre
+*.txt
+ipynb_checkpoints/*
+treeducken/*

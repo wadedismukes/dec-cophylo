@@ -1,4 +1,6 @@
 *.tre
 *.txt
-ipynb_checkpoints/*
+.ipynb_checkpoints/*
 treeducken/*
+Pipfile
+Pipfile.lock

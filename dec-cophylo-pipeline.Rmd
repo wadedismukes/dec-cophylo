@@ -14,7 +14,7 @@ Now we need to make our settings files for `treeducken`. To do this we take in s
 
 ```{r}
 make_settings <- function(sbr, sdr, trr, gbr, gdr, nt, ipp, ne, reps, nl, ng){
-    settings_list = c(paste("-sbr",sbr),
+    settings_list <- c(paste("-sbr",sbr),
                 paste("-sdr",sdr),
                 paste("-gbr", gbr),
                 paste("-gdr", gdr),
@@ -31,8 +31,8 @@ make_settings <- function(sbr, sdr, trr, gbr, gdr, nt, ipp, ne, reps, nl, ng){
 }
 
 settings_writer <- function(settings_list, file_begin){
-    file_name_end = "_settings.txt"
-    out_fn = paste0(file_begin, file_name_end)
+    file_name_end <- "_settings.txt"
+    out_fn <- paste0(file_begin, file_name_end)
     write(settings_list, file = out_fn, ncolumns = 1)
 }
 ```
@@ -45,23 +45,23 @@ chosen to mimic the Geomyidae gophers and their chewing lice parasites.
 
 
 ```{r}
-nt= 5
-turnover = 0.5
-br = 0.05
-dr = 0.025
-trr = as.vector(c(0.0, 0.025, 0.05, 0.1))
-gbr = 0.0
-gdr = 0.0
-reps = 10
-nl = 1
-ng = 1
-ipp = 1
-ne = 1
-num_setting_regimes = length(trr)
+nt<- 5
+turnover <- 0.5
+br <- 0.05
+dr <- 0.025
+trr <- as.vector(c(0.0, 0.025, 0.05, 0.1))
+gbr <- 0.0
+gdr <- 0.0
+reps <- 10
+nl <- 1
+ng <- 1
+ipp <- 1
+ne <- 1
+num_setting_regimes <- length(trr)
 
 for (i in 1:num_setting_regimes){
-    settings_regime_name = paste0(trr[i],"_hsrate")
-    settings = make_settings(br, dr, trr[i], gbr, gdr, nt, 1, 1, reps, nl, ng)
+    settings_regime_name <- paste0(trr[i],"_hsrate")
+    settings <- make_settings(br, dr, trr[i], gbr, gdr, nt, 1, 1, reps, nl, ng)
     settings_writer(settings, settings_regime_name)
 }
 ```
@@ -129,29 +129,29 @@ nexus_range_print <- function(fn, host_tree, symb_tree){
     cat("#NEXUS\n\n")
     cat("Begin data;\n")
     
-    nranges = length(getExtant(host_tree, tol=1e-3))
-    nsymb = length(getExtant(symb_tree, tol=1e-3))
+    nranges <- length(getExtant(host_tree, tol=1e-3))
+    nsymb <- length(getExtant(symb_tree, tol=1e-3))
     
-    line = paste0("Dimensions ntax =", nsymb, " nchar =", nranges, ";\n")
+    line <- paste0("Dimensions ntax =", nsymb, " nchar =", nranges, ";\n")
     
     cat(line)
     cat("Format datatype=Standard missing=? gap=- labels=\"01\";\n")
     cat("Matrix\n")
     
-    hosts = getExtant(host_tree, tol=1e-3)
-    symbs = getExtant(symb_tree, tol=1e-3)
+    hosts <- getExtant(host_tree, tol=1e-3)
+    symbs <- getExtant(symb_tree, tol=1e-3)
     for(i in 1:length(symbs)){
         # first need to figure out which species associated with
-        curr_tip = str_split(symbs[i], "_")
-        sp_indx = str_locate(hosts, curr_tip[[1]][1])
-        sp_indx = which(!is.na(sp_indx[,1]))
+        curr_tip <- str_split(symbs[i], "_")
+        sp_indx <- str_locate(hosts, curr_tip[[1]][1])
+        sp_indx <- which(!is.na(sp_indx[,1]))
         # next mkae the bit vector and put into the thing
-        range_data = rep(0, times = nranges)
-        range_data[sp_indx[1]] = 1
-        range_data_str = str_flatten(str_c(range_data))
+        range_data <- rep(0, times = nranges)
+        range_data[sp_indx[1]] <- 1
+        range_data_str <- str_flatten(str_c(range_data))
         
         # now print the data to nexus file
-        line = paste0("\t", symbs[i], "\t", range_data_str, "\n")
+        line <- paste0("\t", symbs[i], "\t", range_data_str, "\n")
         cat(line)
     }
     cat("\t;")
@@ -169,9 +169,9 @@ this case correspond to areas).
 ```{r}
 connectivity_graph_print <- function(num_epochs, num_hosts, prefix_ofn){
     for(i in sort(1:(num_epochs), decreasing = TRUE)){
-        conn_mat = matrix(0, nrow = num_hosts, ncol = num_hosts)
-        conn_mat[1:i, 1:i] = 1
-        ofn = paste0(prefix_ofn, ".", i, ".txt")
+        conn_mat <- matrix(0, nrow = num_hosts, ncol = num_hosts)
+        conn_mat[1:i, 1:i] <- 1
+        ofn <- paste0(prefix_ofn, ".", i, ".txt")
         write.table(conn_mat, file = ofn, row.names=F, col.names=F)
     }
     
@@ -184,47 +184,47 @@ This next function simply take everything we've done and puts it together.
 
 
 run_sim_regime <- function(sim_dir, prefix_fn, num_reps){
-    host_tree_suffix_fn = ".sp.tre"
-    symb_tree_suffix_fn = "_0.loc.tre"
+    host_tree_suffix_fn <- ".sp.tre"
+    symb_tree_suffix_fn <- "_0.loc.tre"
     
-    brtimes_suffix_fn = ".times.txt"
-    ranges_suffix_fn = ".range.nex"
+    brtimes_suffix_fn <- ".times.txt"
+    ranges_suffix_fn <- ".range.nex"
 
     for (i in 0:(num_reps-1)){
         # read in the host and symbiont trees
-        host_fn = paste0(sim_dir, prefix_fn, i, host_tree_suffix_fn)
-        symb_fn = paste0(sim_dir, prefix_fn, i, symb_tree_suffix_fn)
-        host_nwck_tr = read.nexus(host_fn)
-        symb_nwck_tr = read.nexus(symb_fn)
+        host_fn <- paste0(sim_dir, prefix_fn, i, host_tree_suffix_fn)
+        symb_fn <- paste0(sim_dir, prefix_fn, i, symb_tree_suffix_fn)
+        host_nwck_tr <- read.nexus(host_fn)
+        symb_nwck_tr <- read.nexus(symb_fn)
         symb_nwck_tr$node.label <- NULL
-        pruned_symb_tree_fn = paste0(sim_dir, prefix_fn, i, "_pruned", symb_tree_suffix_fn)
+        pruned_symb_tree_fn <- paste0(sim_dir, prefix_fn, i, "_pruned", symb_tree_suffix_fn)
         pruned_symb_tree <- drop.tip(symb_nwck_tr, getExtinct(symb_nwck_tr, tol = 1e-3))
         write.nexus(pruned_symb_tree, file = pruned_symb_tree_fn, translate = FALSE)
 
         # print out epoch times (no uncertainty in age here)
-        out_fn = paste0(sim_dir, prefix_fn, i)
-        brtimes_out_fn = paste0(out_fn, brtimes_suffix_fn)
-        br_times = sort(c(0.0, branching.times(host_nwck_tr)), decreasing = TRUE)
-        br_times_mat = matrix(nrow = length(br_times), ncol = 2)
-        br_times_mat[,1] = br_times
-        br_times_mat[,2] = br_times - (br_times*0.05)
+        out_fn <- paste0(sim_dir, prefix_fn, i)
+        brtimes_out_fn <- paste0(out_fn, brtimes_suffix_fn)
+        br_times <- sort(c(0.0, branching.times(host_nwck_tr)), decreasing = TRUE)
+        br_times_mat <- matrix(nrow = length(br_times), ncol = 2)
+        br_times_mat[,1] <- br_times
+        br_times_mat[,2] <- br_times - (br_times*0.05)
         write.table(br_times_mat, file = brtimes_out_fn, row.names=F, col.names=F)
         
         # print out range files
-        nex_range_outfn = paste0(out_fn, ranges_suffix_fn)
-        nranges = length(getExtant(host_nwck_tr, tol = 1e-3))
+        nex_range_outfn <- paste0(out_fn, ranges_suffix_fn)
+        nranges <- length(getExtant(host_nwck_tr, tol = 1e-3))
         nexus_range_print(nex_range_outfn, host_nwck_tr, symb_nwck_tr)
         
         # print out connectivity graphs
-        connectivity_prefix_outfn = paste0(out_fn, ".connectivity")
+        connectivity_prefix_outfn <- paste0(out_fn, ".connectivity")
         
         connectivity_graph_print(num_epochs = length(br_times),
                                  num_hosts = nranges,
                                  connectivity_prefix_outfn)
         
         # print out "distance" matrix
-        dist_mat = cophenetic(host_nwck_tr)
-        distmat_ofn = paste0(out_fn, ".distances.txt")
+        dist_mat <- cophenetic(host_nwck_tr)
+        distmat_ofn <- paste0(out_fn, ".distances.txt")
         write.table(dist_mat, file = distmat_ofn, row.names=F, col.names=F)
 
     }
@@ -234,8 +234,8 @@ run_sim_regime <- function(sim_dir, prefix_fn, num_reps){
 Now we can run this for each simulation regime. 
 
 ```{r}
-dir_name = c("0_hsrate/", "0.1_hsrate/", "0.05_hsrate/", "0.025_hsrate/")
-prefix_fn = c("hsrate_0_", "hsrate_0.1_", "hsrate_0.05_", "hsrate_0.025_")
+dir_name <- c("0_hsrate/", "0.1_hsrate/", "0.05_hsrate/", "0.025_hsrate/")
+prefix_fn <- c("hsrate_0_", "hsrate_0.1_", "hsrate_0.05_", "hsrate_0.025_")
 
 for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)

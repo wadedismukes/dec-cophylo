@@ -9,7 +9,7 @@ dist_fn  = geo_fn + ".distances.txt"
 # move/monitor index
 moves = VectorMoves()
 monitors = VectorMonitors()
-n_gen = 5000
+n_gen = 10000 
 
 
 ########
@@ -67,12 +67,16 @@ log10_rate_bg.setValue(-2)
 rate_bg := 10^log10_rate_bg
 moves.append( mvSlide(log10_rate_bg, weight=4) )
 # relative dispersal rate is fixed to one
-dispersal_rate <- 1.0
+# dispersal_rate <- 1.0
+log_sd <- 0.5
+log_mean <- ln(1) - 0.5*log_sd^2
+dispersal_rate ~ dnLognormal(mean=log_mean, sd=log_sd)
+moves.append( mvScale(dispersal_rate , weight=2) )
 
 # the geographical distance scaling factor
-distance_scale ~ dnUnif(0,20)
-distance_scale.setValue(0.01)
-moves.append( mvScale(distance_scale, weight=3) )
+# distance_scale ~ dnUnif(0,20)
+# distance_scale.setValue(0.01)
+# moves.append( mvScale(distance_scale, weight=3) )
 
 # then, the dispersal rate matrix
 for (i in 1:n_epochs) {
@@ -80,7 +84,7 @@ for (i in 1:n_epochs) {
         for (k in 1:n_areas) {
             dr[i][j][k] <- 0.0
             if (connectivity[i][j][k] > 0) {
-                dr[i][j][k] := dispersal_rate * exp(-distance_scale * distances[j][k])
+                dr[i][j][k] := dispersal_rate # * exp(-distance_scale * distances[j][k])
             }
         }
     }
@@ -161,8 +165,9 @@ m_bg.clamp(dat_range_n)
 # Monitors #
 ############
 
+# monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate, distance_scale) )
 
-monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate, distance_scale) )
+monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate, dispersal_rate) )
 monitors.append( mnModel(file=out_fn+".model.log", printgen=10) )
 monitors.append( mnFile(tree, filename=out_fn+".tre", printgen=10) )
 monitors.append( mnJointConditionalAncestralState(tree=tree,

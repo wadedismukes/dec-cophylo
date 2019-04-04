@@ -1611,7 +1611,7 @@ settings_writer &lt;- function(settings_list, file_begin){
 <div id="setting-simulation-parameters-and-printing-files" class="section level3">
 <h3>Setting simulation parameters and printing files</h3>
 <p>Here I have set the model parameters to be printed into settings files at the top. The for loop generates the number of regimes I want to simulate under. The number of tips and timing (13 here corresponding to 13 million years ago (mya)) were chosen to mimic the Geomyidae gophers and their chewing lice parasites.</p>
-<pre class="r"><code>nt = 12
+<pre class="r"><code>nt= 5
 turnover = 0.5
 br = 0.05
 dr = 0.025
@@ -1659,7 +1659,7 @@ done</code></pre>
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0.025
-##      Number of extant taxa           = 12
+##      Number of extant taxa           = 5
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
@@ -1674,14 +1674,14 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {48419, 23716}
+## Seeds = {11232, 23717}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0.05
-##      Number of extant taxa           = 12
+##      Number of extant taxa           = 5
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
@@ -1696,14 +1696,14 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {48419, 23716}
+## Seeds = {11232, 23717}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0.1
-##      Number of extant taxa           = 12
+##      Number of extant taxa           = 5
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
@@ -1718,14 +1718,14 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {48419, 23716}
+## Seeds = {11232, 23717}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0
-##      Number of extant taxa           = 12
+##      Number of extant taxa           = 5
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
@@ -1740,7 +1740,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {48419, 23716}</code></pre>
+## Seeds = {11232, 23717}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1793,7 +1793,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         cat(line)
     }
     cat(&quot;\t;&quot;)
-    cat(&quot;End;&quot;)
+    cat(&quot;\nEnd;&quot;)
     sink()
 }</code></pre>
 <p>We also need a matrix that describes which tips are able to be dispersed to at which time points, this is done in this function. This will print out a number of files equal to the number of epochs that we are going to be dealing with. Each matrix has rows and columns equal to the number of hosts (which in this case correspond to areas).</p>
@@ -1820,10 +1820,10 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         symb_fn = paste0(sim_dir, prefix_fn, i, symb_tree_suffix_fn)
         host_nwck_tr = read.nexus(host_fn)
         symb_nwck_tr = read.nexus(symb_fn)
-        
+        symb_nwck_tr$node.label &lt;- NULL
         pruned_symb_tree_fn = paste0(sim_dir, prefix_fn, i, &quot;_pruned&quot;, symb_tree_suffix_fn)
         pruned_symb_tree &lt;- drop.tip(symb_nwck_tr, getExtinct(symb_nwck_tr, tol = 1e-3))
-        write.nexus(pruned_symb_tree, file = pruned_symb_tree_fn)
+        write.nexus(pruned_symb_tree, file = pruned_symb_tree_fn, translate = FALSE)
 
         # print out epoch times (no uncertainty in age here)
         out_fn = paste0(sim_dir, prefix_fn, i)

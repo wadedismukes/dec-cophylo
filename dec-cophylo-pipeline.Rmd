@@ -45,7 +45,7 @@ chosen to mimic the Geomyidae gophers and their chewing lice parasites.
 
 
 ```{r}
-nt = 12
+nt= 5
 turnover = 0.5
 br = 0.05
 dr = 0.025
@@ -181,6 +181,8 @@ connectivity_graph_print <- function(num_epochs, num_hosts, prefix_ofn){
 This next function simply take everything we've done and puts it together.
 
 ```{r}
+
+
 run_sim_regime <- function(sim_dir, prefix_fn, num_reps){
     host_tree_suffix_fn = ".sp.tre"
     symb_tree_suffix_fn = "_0.loc.tre"
@@ -194,7 +196,7 @@ run_sim_regime <- function(sim_dir, prefix_fn, num_reps){
         symb_fn = paste0(sim_dir, prefix_fn, i, symb_tree_suffix_fn)
         host_nwck_tr = read.nexus(host_fn)
         symb_nwck_tr = read.nexus(symb_fn)
-        
+        symb_nwck_tr$node.label <- NULL
         pruned_symb_tree_fn = paste0(sim_dir, prefix_fn, i, "_pruned", symb_tree_suffix_fn)
         pruned_symb_tree <- drop.tip(symb_nwck_tr, getExtinct(symb_nwck_tr, tol = 1e-3))
         write.nexus(pruned_symb_tree, file = pruned_symb_tree_fn, translate = FALSE)

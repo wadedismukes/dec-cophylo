@@ -1,8 +1,8 @@
 # filenames
-range_fn = "0_hsrate/hsrate_0_0.range.nex"
-tree_fn   = "0_hsrate/hsrate_0_0_pruned_0.loc.tre"
-out_fn   = "0_hsrate/output/hsrate_0_0"
-geo_fn   = "0_hsrate/hsrate_0_0"
+range_fn = "0.1_hsrate/hsrate_0.1_0.range.nex"
+tree_fn   = "0.1_hsrate/hsrate_0.1_0_pruned_0.loc.tre"
+out_fn   = "0.1_hsrate/output/hsrate_0.1_0"
+geo_fn   = "0.1_hsrate/hsrate_0.1_0"
 times_fn = geo_fn + ".times.txt"
 dist_fn  = geo_fn + ".distances.txt"
 
@@ -140,15 +140,17 @@ P_DEC := fnDECCladoProbs(eventProbs=clado_type_probs,
 
 
 # root frequencies
-rf_DEC_tmp    <- rep(1/n_states, n_states)
-rf_DEC    <- simplex(rf_DEC_tmp)
+rf_DEC <- rep(0, n_states)
+rf_DEC[2] <- 1 
+rf_DEC_simp <- simplex(rf_DEC)
+
 
 # the phylogenetic CTMC with cladogenetic events
 m_bg ~ dnPhyloCTMCClado(tree=tree,
                            Q=Q_DEC_epoch,
                            cladoProbs=P_DEC,
                            branchRates=rate_bg,
-                           rootFrequencies=rf_DEC,
+                           rootFrequencies=rf_DEC_simp,
                            type="NaturalNumbers",
                            nSites=1)
     

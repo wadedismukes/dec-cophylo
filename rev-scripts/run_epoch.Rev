@@ -1,8 +1,8 @@
 # filenames
-range_fn = "0.1_hsrate/hsrate_0.1_0.range.nex"
-tree_fn   = "0.1_hsrate/hsrate_0.1_0_pruned_0.loc.tre"
-out_fn   = "0.1_hsrate/output/hsrate_0.1_0"
-geo_fn   = "0.1_hsrate/hsrate_0.1_0"
+range_fn = "data/0.1_hsrate/hsrate_0.1_0.range.nex"
+tree_fn   = "data/0.1_hsrate/hsrate_0.1_0_pruned_0.loc.tre"
+out_fn   = "data/0.1_hsrate/output/hsrate_0.1_0"
+geo_fn   = "data/0.1_hsrate/hsrate_0.1_0"
 times_fn = geo_fn + ".times.txt"
 dist_fn  = geo_fn + ".distances.txt"
 
@@ -67,11 +67,7 @@ log10_rate_bg.setValue(-2)
 rate_bg := 10^log10_rate_bg
 moves.append( mvSlide(log10_rate_bg, weight=4) )
 # relative dispersal rate is fixed to one
-# dispersal_rate <- 1.0
-log_sd <- 0.5
-log_mean <- ln(1) - 0.5*log_sd^2
-dispersal_rate ~ dnLognormal(mean=log_mean, sd=log_sd)
-moves.append( mvScale(dispersal_rate , weight=2) )
+dispersal_rate <- 1.0
 
 # the geographical distance scaling factor
 # distance_scale ~ dnUnif(0,20)
@@ -167,7 +163,7 @@ m_bg.clamp(dat_range_n)
 
 # monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate, distance_scale) )
 
-monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate, dispersal_rate) )
+monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate) )
 monitors.append( mnModel(file=out_fn+".model.log", printgen=10) )
 monitors.append( mnFile(tree, filename=out_fn+".tre", printgen=10) )
 monitors.append( mnJointConditionalAncestralState(tree=tree,

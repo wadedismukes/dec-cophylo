@@ -4,4 +4,8 @@
 treeducken/*
 Pipfile
 Pipfile.lock
-*.0nex
+*.nex
+*.Rev
+*.html
+.RData
+.Rhistory

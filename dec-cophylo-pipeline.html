@@ -1586,7 +1586,7 @@ $(document).ready(function () {
 <h3>Making <code>treeducken</code> settings files</h3>
 <p>Now we need to make our settings files for <code>treeducken</code>. To do this we take in some user inputs for the various parameters and then output that in the correct format.</p>
 <pre class="r"><code>make_settings &lt;- function(sbr, sdr, trr, gbr, gdr, nt, ipp, ne, reps, nl, ng){
-    settings_list = c(paste(&quot;-sbr&quot;,sbr),
+    settings_list &lt;- c(paste(&quot;-sbr&quot;,sbr),
                 paste(&quot;-sdr&quot;,sdr),
                 paste(&quot;-gbr&quot;, gbr),
                 paste(&quot;-gdr&quot;, gdr),
@@ -1603,31 +1603,31 @@ $(document).ready(function () {
 }
 
 settings_writer &lt;- function(settings_list, file_begin){
-    file_name_end = &quot;_settings.txt&quot;
-    out_fn = paste0(file_begin, file_name_end)
+    file_name_end &lt;- &quot;_settings.txt&quot;
+    out_fn &lt;- paste0(file_begin, file_name_end)
     write(settings_list, file = out_fn, ncolumns = 1)
 }</code></pre>
 </div>
 <div id="setting-simulation-parameters-and-printing-files" class="section level3">
 <h3>Setting simulation parameters and printing files</h3>
 <p>Here I have set the model parameters to be printed into settings files at the top. The for loop generates the number of regimes I want to simulate under. The number of tips and timing (13 here corresponding to 13 million years ago (mya)) were chosen to mimic the Geomyidae gophers and their chewing lice parasites.</p>
-<pre class="r"><code>nt= 5
-turnover = 0.5
-br = 0.05
-dr = 0.025
-trr = as.vector(c(0.0, 0.025, 0.05, 0.1))
-gbr = 0.0
-gdr = 0.0
-reps = 10
-nl = 1
-ng = 1
-ipp = 1
-ne = 1
-num_setting_regimes = length(trr)
+<pre class="r"><code>nt&lt;- 5
+turnover &lt;- 0.5
+br &lt;- 0.05
+dr &lt;- 0.025
+trr &lt;- as.vector(c(0.0, 0.025, 0.05, 0.1))
+gbr &lt;- 0.0
+gdr &lt;- 0.0
+reps &lt;- 10
+nl &lt;- 1
+ng &lt;- 1
+ipp &lt;- 1
+ne &lt;- 1
+num_setting_regimes &lt;- length(trr)
 
 for (i in 1:num_setting_regimes){
-    settings_regime_name = paste0(trr[i],&quot;_hsrate&quot;)
-    settings = make_settings(br, dr, trr[i], gbr, gdr, nt, 1, 1, reps, nl, ng)
+    settings_regime_name &lt;- paste0(trr[i],&quot;_hsrate&quot;)
+    settings &lt;- make_settings(br, dr, trr[i], gbr, gdr, nt, 1, 1, reps, nl, ng)
     settings_writer(settings, settings_regime_name)
 }</code></pre>
 </div>
@@ -1644,14 +1644,14 @@ fi
 
 #make directory structure
 mkdir -p settings/ &amp;&amp; mv *_settings.txt settings/
-find ./settings/ -name &quot;*_settings.txt&quot; | xargs basename -s &quot;_settings.txt&quot; | xargs mkdir -p </code></pre>
+find ./settings/ -name &quot;*_settings.txt&quot; | xargs basename -s &quot;_settings.txt&quot; | xargs -I {} mkdir -p ./data/{}</code></pre>
 <pre><code>## already installed!</code></pre>
 <p>Now run the simulations!</p>
 <pre class="bash"><code>
 for f in settings/*_settings.txt
 do
     treeducken/treeducken -i $f
-    mv *.tre $(basename -s &quot;_settings.txt&quot; $f)
+    mv *.tre ./data/$(basename -s &quot;_settings.txt&quot; $f)
 done</code></pre>
 <pre><code>## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1674,7 +1674,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {11232, 23717}
+## Seeds = {18879, 23718}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1696,7 +1696,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {11232, 23717}
+## Seeds = {18879, 23718}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1718,7 +1718,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {11232, 23717}
+## Seeds = {18879, 23718}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1740,7 +1740,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {11232, 23717}</code></pre>
+## Seeds = {18879, 23718}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1767,29 +1767,29 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
     cat(&quot;#NEXUS\n\n&quot;)
     cat(&quot;Begin data;\n&quot;)
     
-    nranges = length(getExtant(host_tree, tol=1e-3))
-    nsymb = length(getExtant(symb_tree, tol=1e-3))
+    nranges &lt;- length(getExtant(host_tree, tol=1e-3))
+    nsymb &lt;- length(getExtant(symb_tree, tol=1e-3))
     
-    line = paste0(&quot;Dimensions ntax =&quot;, nsymb, &quot; nchar =&quot;, nranges, &quot;;\n&quot;)
+    line &lt;- paste0(&quot;Dimensions ntax =&quot;, nsymb, &quot; nchar =&quot;, nranges, &quot;;\n&quot;)
     
     cat(line)
     cat(&quot;Format datatype=Standard missing=? gap=- labels=\&quot;01\&quot;;\n&quot;)
     cat(&quot;Matrix\n&quot;)
     
-    hosts = getExtant(host_tree, tol=1e-3)
-    symbs = getExtant(symb_tree, tol=1e-3)
+    hosts &lt;- getExtant(host_tree, tol=1e-3)
+    symbs &lt;- getExtant(symb_tree, tol=1e-3)
     for(i in 1:length(symbs)){
         # first need to figure out which species associated with
-        curr_tip = str_split(symbs[i], &quot;_&quot;)
-        sp_indx = str_locate(hosts, curr_tip[[1]][1])
-        sp_indx = which(!is.na(sp_indx[,1]))
+        curr_tip &lt;- str_split(symbs[i], &quot;_&quot;)
+        sp_indx &lt;- str_locate(hosts, curr_tip[[1]][1])
+        sp_indx &lt;- which(!is.na(sp_indx[,1]))
         # next mkae the bit vector and put into the thing
-        range_data = rep(0, times = nranges)
-        range_data[sp_indx[1]] = 1
-        range_data_str = str_flatten(str_c(range_data))
+        range_data &lt;- rep(0, times = nranges)
+        range_data[sp_indx[1]] &lt;- 1
+        range_data_str &lt;- str_flatten(str_c(range_data))
         
         # now print the data to nexus file
-        line = paste0(&quot;\t&quot;, symbs[i], &quot;\t&quot;, range_data_str, &quot;\n&quot;)
+        line &lt;- paste0(&quot;\t&quot;, symbs[i], &quot;\t&quot;, range_data_str, &quot;\n&quot;)
         cat(line)
     }
     cat(&quot;\t;&quot;)
@@ -1799,63 +1799,63 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
 <p>We also need a matrix that describes which tips are able to be dispersed to at which time points, this is done in this function. This will print out a number of files equal to the number of epochs that we are going to be dealing with. Each matrix has rows and columns equal to the number of hosts (which in this case correspond to areas).</p>
 <pre class="r"><code>connectivity_graph_print &lt;- function(num_epochs, num_hosts, prefix_ofn){
     for(i in sort(1:(num_epochs), decreasing = TRUE)){
-        conn_mat = matrix(0, nrow = num_hosts, ncol = num_hosts)
-        conn_mat[1:i, 1:i] = 1
-        ofn = paste0(prefix_ofn, &quot;.&quot;, i, &quot;.txt&quot;)
+        conn_mat &lt;- matrix(0, nrow = num_hosts, ncol = num_hosts)
+        conn_mat[1:i, 1:i] &lt;- 1
+        ofn &lt;- paste0(prefix_ofn, &quot;.&quot;, i, &quot;.txt&quot;)
         write.table(conn_mat, file = ofn, row.names=F, col.names=F)
     }
     
 }</code></pre>
 <p>This next function simply take everything we’ve done and puts it together.</p>
 <pre class="r"><code>run_sim_regime &lt;- function(sim_dir, prefix_fn, num_reps){
-    host_tree_suffix_fn = &quot;.sp.tre&quot;
-    symb_tree_suffix_fn = &quot;_0.loc.tre&quot;
+    host_tree_suffix_fn &lt;- &quot;.sp.tre&quot;
+    symb_tree_suffix_fn &lt;- &quot;_0.loc.tre&quot;
     
-    brtimes_suffix_fn = &quot;.times.txt&quot;
-    ranges_suffix_fn = &quot;.range.nex&quot;
+    brtimes_suffix_fn &lt;- &quot;.times.txt&quot;
+    ranges_suffix_fn &lt;- &quot;.range.nex&quot;
 
     for (i in 0:(num_reps-1)){
         # read in the host and symbiont trees
-        host_fn = paste0(sim_dir, prefix_fn, i, host_tree_suffix_fn)
-        symb_fn = paste0(sim_dir, prefix_fn, i, symb_tree_suffix_fn)
-        host_nwck_tr = read.nexus(host_fn)
-        symb_nwck_tr = read.nexus(symb_fn)
+        host_fn &lt;- paste0(sim_dir, prefix_fn, i, host_tree_suffix_fn)
+        symb_fn &lt;- paste0(sim_dir, prefix_fn, i, symb_tree_suffix_fn)
+        host_nwck_tr &lt;- read.nexus(host_fn)
+        symb_nwck_tr &lt;- read.nexus(symb_fn)
         symb_nwck_tr$node.label &lt;- NULL
-        pruned_symb_tree_fn = paste0(sim_dir, prefix_fn, i, &quot;_pruned&quot;, symb_tree_suffix_fn)
+        pruned_symb_tree_fn &lt;- paste0(sim_dir, prefix_fn, i, &quot;_pruned&quot;, symb_tree_suffix_fn)
         pruned_symb_tree &lt;- drop.tip(symb_nwck_tr, getExtinct(symb_nwck_tr, tol = 1e-3))
         write.nexus(pruned_symb_tree, file = pruned_symb_tree_fn, translate = FALSE)
 
         # print out epoch times (no uncertainty in age here)
-        out_fn = paste0(sim_dir, prefix_fn, i)
-        brtimes_out_fn = paste0(out_fn, brtimes_suffix_fn)
-        br_times = sort(c(0.0, branching.times(host_nwck_tr)), decreasing = TRUE)
-        br_times_mat = matrix(nrow = length(br_times), ncol = 2)
-        br_times_mat[,1] = br_times
-        br_times_mat[,2] = br_times - (br_times*0.05)
+        out_fn &lt;- paste0(sim_dir, prefix_fn, i)
+        brtimes_out_fn &lt;- paste0(out_fn, brtimes_suffix_fn)
+        br_times &lt;- sort(c(0.0, branching.times(host_nwck_tr)), decreasing = TRUE)
+        br_times_mat &lt;- matrix(nrow = length(br_times), ncol = 2)
+        br_times_mat[,1] &lt;- br_times
+        br_times_mat[,2] &lt;- br_times - (br_times*0.05)
         write.table(br_times_mat, file = brtimes_out_fn, row.names=F, col.names=F)
         
         # print out range files
-        nex_range_outfn = paste0(out_fn, ranges_suffix_fn)
-        nranges = length(getExtant(host_nwck_tr, tol = 1e-3))
+        nex_range_outfn &lt;- paste0(out_fn, ranges_suffix_fn)
+        nranges &lt;- length(getExtant(host_nwck_tr, tol = 1e-3))
         nexus_range_print(nex_range_outfn, host_nwck_tr, symb_nwck_tr)
         
         # print out connectivity graphs
-        connectivity_prefix_outfn = paste0(out_fn, &quot;.connectivity&quot;)
+        connectivity_prefix_outfn &lt;- paste0(out_fn, &quot;.connectivity&quot;)
         
         connectivity_graph_print(num_epochs = length(br_times),
                                  num_hosts = nranges,
                                  connectivity_prefix_outfn)
         
         # print out &quot;distance&quot; matrix
-        dist_mat = cophenetic(host_nwck_tr)
-        distmat_ofn = paste0(out_fn, &quot;.distances.txt&quot;)
+        dist_mat &lt;- cophenetic(host_nwck_tr)
+        distmat_ofn &lt;- paste0(out_fn, &quot;.distances.txt&quot;)
         write.table(dist_mat, file = distmat_ofn, row.names=F, col.names=F)
 
     }
 }</code></pre>
 <p>Now we can run this for each simulation regime.</p>
-<pre class="r"><code>dir_name = c(&quot;0_hsrate/&quot;, &quot;0.1_hsrate/&quot;, &quot;0.05_hsrate/&quot;, &quot;0.025_hsrate/&quot;)
-prefix_fn = c(&quot;hsrate_0_&quot;, &quot;hsrate_0.1_&quot;, &quot;hsrate_0.05_&quot;, &quot;hsrate_0.025_&quot;)
+<pre class="r"><code>dir_name &lt;- c(&quot;data/0_hsrate/&quot;, &quot;data/0.1_hsrate/&quot;, &quot;data/0.05_hsrate/&quot;, &quot;data/0.025_hsrate/&quot;)
+prefix_fn &lt;- c(&quot;hsrate_0_&quot;, &quot;hsrate_0.1_&quot;, &quot;hsrate_0.05_&quot;, &quot;hsrate_0.025_&quot;)
 
 for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)

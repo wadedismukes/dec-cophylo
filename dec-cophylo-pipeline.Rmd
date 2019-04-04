@@ -81,7 +81,7 @@ fi
 
 #make directory structure
 mkdir -p settings/ && mv *_settings.txt settings/
-find ./settings/ -name "*_settings.txt" | xargs basename -s "_settings.txt" | xargs mkdir -p 
+find ./settings/ -name "*_settings.txt" | xargs basename -s "_settings.txt" | xargs -I {} mkdir -p ./data/{}
 ```
 
 Now run the simulations! 
@@ -92,7 +92,7 @@ Now run the simulations!
 for f in settings/*_settings.txt
 do
     treeducken/treeducken -i $f
-    mv *.tre $(basename -s "_settings.txt" $f)
+    mv *.tre ./data/$(basename -s "_settings.txt" $f)
 done
 ```
 
@@ -174,7 +174,6 @@ connectivity_graph_print <- function(num_epochs, num_hosts, prefix_ofn){
         ofn <- paste0(prefix_ofn, ".", i, ".txt")
         write.table(conn_mat, file = ofn, row.names=F, col.names=F)
     }
-    
 }
 ```
 
@@ -231,14 +230,160 @@ run_sim_regime <- function(sim_dir, prefix_fn, num_reps){
 }
 ```
 
+Output rev scripts for each replicate
+```{r rev-script-printer}
+print_rev_script <- function(dir_name, prefix_fn, reps){
+    symb_tree_suffix_fn <- "_0.loc.tre"
+    rev_script_dir <- "rev-scripts/"
+    brtimes_suffix_fn <- ".times.txt"
+    ranges_suffix_fn <- ".range.nex"
+    
+    for(i in 0:(reps-1)){
+        rev_out_fn <- paste0(rev_script_dir, "run_epoch_", prefix_fn, i, ".Rev")
+        system2("touch", args = rev_out_fn)
+        sink(rev_out_fn)
+        
+        
+        range_fn <- paste0(dir_name, prefix_fn, i, ranges_suffix_fn)
+        tree_fn <- paste0(dir_name, prefix_fn, "_pruned", i, symb_tree_suffix_fn)
+        out_fn <- paste0(dir_name, "output/", prefix_fn, i)
+        geo_fn <- paste0(dir_name, prefix_fn, i)
+
+        cat(paste0("range_fn = \"", range_fn, "\"\n"))
+        cat(paste0("tree_fn = \"", tree_fn, "\"\n"))
+        cat(paste0("out_fn = \"", out_fn, "\"\n"))
+        cat(paste0("geo_fn = \"", geo_fn, "\"\n"))
+        cat("times_fn = geo_fn + \".times.txt\"\n")
+        cat("dist_fn  = geo_fn + \".distances.txt\"\n")
+
+        cat("moves = VectorMoves()\n")
+        cat("monitors = VectorMonitors()\n")
+        cat("n_gen = 10000\n")
+
+        cat("dat_range_01 = readDiscreteCharacterData(range_fn)\n")
+        cat("n_areas <- dat_range_01.nchar()\n")
+        
+        cat("max_areas <- 2\n")
+        cat("n_states <- 0\n")
+        cat("for (k in 0:max_areas) n_states += choose(n_areas, k)\n")
+        
+        cat("dat_range_n = formatDiscreteCharacterData(dat_range_01, \"DEC\", n_states)\n")
+        cat("state_desc = dat_range_n.getStateDescriptions()\n")
+        cat("state_desc_str = \"state,range\n\"\n")
+        cat("for (i in 1:state_desc.size())\n")
+        cat("{\n")
+        cat("\tstate_desc_str += (i-1) + "," + state_desc[i] + \"\n\"\n")
+        cat("{\n")
+        
+        cat("write(state_desc_str, file=out_fn+\".state_labels.txt\"\n")
+        
+        cat("time_bounds <- readDataDelimitedFile(file=times_fn, delimiter=\" \")\n")
+        cat("n_epochs <- time_bounds.nrows()\n")
+        
+        cat("for (i in 1:n_epochs) {\n")
+        cat("\tepoch_fn = geo_fn + \".connectivity.\" + i + \".txt\"\n")
+        cat("\tconnectivity[i] <- readDataDelimitedFile(file=epoch_fn, delimiter=\" \")\n")
+        cat("}\n")
+        
+        cat("distances <- readDataDelimitedFile(file=dist_fn, delimiter=\" \")\n")
+        cat("tree <- readTrees(tree_fn)[1]\n")
+        
+        cat("log10_rate_bg ~ dnUniform(-4,2)\n")
+        cat("log10_rate_bg.setValue(-2)\n")
+        cat("rate_bg := 10^log10_rate_bg\n")
+        cat("moves.append( mvSlide(log10_rate_bg, weight=4) )\n")
+        cat("dispersal_rate <- 1.0\n")
+        
+        cat("for (i in 1:n_epochs) {\n")
+        cat("\tfor (j in 1:n_areas) {\n")
+        cat("\t\tfor (k in 1:n_areas) {\n")
+        cat("\t\t\tdr[i][j][k] <- 0.0\n")
+        cat("\t\t\tif (connectivity[i][j][k] > 0) {\n")
+        cat("\t\t\t\tdr[i][j][k] := dispersal_rate\n")
+        cat("\t\t\t}\n")
+        cat("\t\t}\n")
+        cat("\t}\n")
+        cat("}\n")
+        
+        cat("log_sd <- 0.5\n")
+        cat("log_mean <- ln(1) - 0.5*log_sd^2\n")
+        cat("extirpation_rate ~ dnLognormal(mean=log_mean, sd=log_sd)\n")
+        cat("moves.append( mvScale(extirpation_rate, weight=2) )\n")
+
+        cat("for (i in 1:n_epochs) {\n")
+        cat("\tfor (j in 1:n_areas) {\n")
+        cat("\t\tfor (k in 1:n_areas) {\n")
+        cat("\t\t\ter[i][j][k] <- 0.0\n")
+        cat("\t\t}\n")
+        cat("\t\ter[i][j][k] := extirpation rate\n")
+        cat("\t}\n")
+        cat("}\n")
+        
+        
+        cat("for (i in 1:n_epochs) {\n")
+        cat("Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
+                                        extirpationRates=er[i],
+                                        maxRangeSize=max_areas)\n")
+        cat("}\n")
+
+        cat("for (i in 1:n_epochs) {\n")
+        cat("\ttime_max[i] <- time_bounds[i][1]\n")
+        cat("\ttime_min[i] <- time_bounds[i][2]\n")
+        cat("\tif (i != n_epochs) {\n")
+        cat("\t\tepoch_times[i] ~ dnUniform(time_min[i], time_max[i])\n")
+        cat("\t\tmoves.append( mvSlide(epoch_times[i], delta=(time_max[i]-time_min[i])/2) )\n")
+        cat("\t} else {\n")
+        cat("\t\tepoch_times <- 0.0\n")
+        cat("\t}\n")
+        cat("}\n")        
+        
+        
+        cat("Q_DEC_epoch := fnEpoch(Q=Q_DEC, times=epoch_times, rates=rep(1, n_epochs))\n")
+        
+        cat("clado_event_types <- [ \"s\", \"a\" ]\n")
+        cat("p_sympatry ~ dnUniform(0,1)\n")
+        cat("p_allopatry := abs(1.0 - p_sympatry)\n")
+        cat("clado_type_probs := simplex(p_sympatry, p_allopatry)\n")
+        cat("moves.append( mvSlide(p_sympatry, weight=2) )\n")
+        cat("P_DEC := fnDECCladoProbs(eventProbs=clado_type_probs,
+                                                eventTypes=clado_event_types,
+                                                numCharacters=n_areas,
+                                                maxRangeSize=max_areas)\n")
+        
+        cat("rf_DEC <- rep(0, n_states)\n")
+        cat("rf_DEC[2] <- 1\n")
+        cat("rf_DEC_simp <- simplex(rf_DEC)\n")
+        
+        cat("m_bg ~ dnPhyloCTMCClado(tree=tree,
+                           Q=Q_DEC_epoch,
+                           cladoProbs=P_DEC,
+                           branchRates=rate_bg,
+                           rootFrequencies=rf_DEC_simp,
+                           type=\"NaturalNumbers\",
+                           nSites=1)\n")
+        cat("m_bg.clamp(dat_range_n)\n")
+        
+        cat("mymodel = model(m_bg)\n")
+        cat("mymcmc = mcmc(mymodel, monitors, moves)\n")
+        cat("mymcmc.run(n_gen)\n")
+        
+        
+        sink()
+    }
+}
+
+```
+
+
 Now we can run this for each simulation regime. 
 
 ```{r}
-dir_name <- c("0_hsrate/", "0.1_hsrate/", "0.05_hsrate/", "0.025_hsrate/")
+dir_name <- c("data/0_hsrate/", "data/0.1_hsrate/", "data/0.05_hsrate/", "data/0.025_hsrate/")
 prefix_fn <- c("hsrate_0_", "hsrate_0.1_", "hsrate_0.05_", "hsrate_0.025_")
 
 for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)
+    print_rev_script(dir_name[i], prefix_fn[i], reps)
 }
 
 ```
@@ -249,3 +394,4 @@ Now we just need to write up our Rev scripts and run them.
 ## Rev file bit
 
 Also a test of Rev code chunks in Rmarkdown/knitr.
+

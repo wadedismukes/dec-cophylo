@@ -1674,7 +1674,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {30417, 23723}
+## Seeds = {30835, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1696,7 +1696,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {30417, 23723}
+## Seeds = {30835, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1718,7 +1718,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {30418, 23723}
+## Seeds = {30835, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1740,7 +1740,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {30418, 23723}</code></pre>
+## Seeds = {30835, 23723}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1894,7 +1894,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         cat(&quot;for (i in 1:state_desc.size())\n&quot;)
         cat(&quot;{\n&quot;)
         cat(&quot;\tstate_desc_str += (i-1) + \&quot;,\&quot; + state_desc[i] + \&quot;\\n\&quot;\n&quot;)
-        cat(&quot;{\n&quot;)
+        cat(&quot;}\n&quot;)
         
         cat(&quot;write(state_desc_str, file=out_fn+\&quot;.state_labels.txt\&quot;\n&quot;)
         

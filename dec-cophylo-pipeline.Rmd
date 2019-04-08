@@ -269,7 +269,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         
         cat("dat_range_n = formatDiscreteCharacterData(dat_range_01, \"DEC\", n_states)\n")
         cat("state_desc = dat_range_n.getStateDescriptions()\n")
-        cat("state_desc_str = \"state,range\n\"\n")
+        cat("state_desc_str = \"state,range\"\n")
         cat("for (i in 1:state_desc.size())\n")
         cat("{\n")
         cat("\tstate_desc_str += (i-1) + "," + state_desc[i] + \"\n\"\n")

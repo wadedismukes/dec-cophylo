@@ -1674,7 +1674,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {18879, 23718}
+## Seeds = {27642, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1696,7 +1696,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {18879, 23718}
+## Seeds = {27642, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1718,7 +1718,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {18879, 23718}
+## Seeds = {27642, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1740,7 +1740,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {18879, 23718}</code></pre>
+## Seeds = {27642, 23723}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1804,7 +1804,6 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         ofn &lt;- paste0(prefix_ofn, &quot;.&quot;, i, &quot;.txt&quot;)
         write.table(conn_mat, file = ofn, row.names=F, col.names=F)
     }
-    
 }</code></pre>
 <p>This next function simply take everything we’ve done and puts it together.</p>
 <pre class="r"><code>run_sim_regime &lt;- function(sim_dir, prefix_fn, num_reps){
@@ -1853,12 +1852,153 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
 
     }
 }</code></pre>
+<p>Output rev scripts for each replicate</p>
+<pre class="r"><code>print_rev_script &lt;- function(dir_name, prefix_fn, reps){
+    symb_tree_suffix_fn &lt;- &quot;_0.loc.tre&quot;
+    rev_script_dir &lt;- &quot;rev-scripts/&quot;
+    brtimes_suffix_fn &lt;- &quot;.times.txt&quot;
+    ranges_suffix_fn &lt;- &quot;.range.nex&quot;
+    
+    for(i in 0:(reps-1)){
+        rev_out_fn &lt;- paste0(rev_script_dir, &quot;run_epoch_&quot;, prefix_fn, i, &quot;.Rev&quot;)
+        system2(&quot;touch&quot;, args = rev_out_fn)
+        sink(rev_out_fn)
+        
+        
+        range_fn &lt;- paste0(dir_name, prefix_fn, i, ranges_suffix_fn)
+        tree_fn &lt;- paste0(dir_name, prefix_fn, &quot;_pruned&quot;, i, symb_tree_suffix_fn)
+        out_fn &lt;- paste0(dir_name, &quot;output/&quot;, prefix_fn, i)
+        geo_fn &lt;- paste0(dir_name, prefix_fn, i)
+
+        cat(paste0(&quot;range_fn = \&quot;&quot;, range_fn, &quot;\&quot;\n&quot;))
+        cat(paste0(&quot;tree_fn = \&quot;&quot;, tree_fn, &quot;\&quot;\n&quot;))
+        cat(paste0(&quot;out_fn = \&quot;&quot;, out_fn, &quot;\&quot;\n&quot;))
+        cat(paste0(&quot;geo_fn = \&quot;&quot;, geo_fn, &quot;\&quot;\n&quot;))
+        cat(&quot;times_fn = geo_fn + \&quot;.times.txt\&quot;\n&quot;)
+        cat(&quot;dist_fn  = geo_fn + \&quot;.distances.txt\&quot;\n&quot;)
+
+        cat(&quot;moves = VectorMoves()\n&quot;)
+        cat(&quot;monitors = VectorMonitors()\n&quot;)
+        cat(&quot;n_gen = 10000\n&quot;)
+
+        cat(&quot;dat_range_01 = readDiscreteCharacterData(range_fn)\n&quot;)
+        cat(&quot;n_areas &lt;- dat_range_01.nchar()\n&quot;)
+        
+        cat(&quot;max_areas &lt;- 2\n&quot;)
+        cat(&quot;n_states &lt;- 0\n&quot;)
+        cat(&quot;for (k in 0:max_areas) n_states += choose(n_areas, k)\n&quot;)
+        
+        cat(&quot;dat_range_n = formatDiscreteCharacterData(dat_range_01, \&quot;DEC\&quot;, n_states)\n&quot;)
+        cat(&quot;state_desc = dat_range_n.getStateDescriptions()\n&quot;)
+        cat(&quot;state_desc_str = \&quot;state,range\n\&quot;\n&quot;)
+        cat(&quot;for (i in 1:state_desc.size())\n&quot;)
+        cat(&quot;{\n&quot;)
+        cat(&quot;\tstate_desc_str += (i-1) + &quot;,&quot; + state_desc[i] + \&quot;\n\&quot;\n&quot;)
+        cat(&quot;{\n&quot;)
+        
+        cat(&quot;write(state_desc_str, file=out_fn+\&quot;.state_labels.txt\&quot;\n&quot;)
+        
+        cat(&quot;time_bounds &lt;- readDataDelimitedFile(file=times_fn, delimiter=\&quot; \&quot;)\n&quot;)
+        cat(&quot;n_epochs &lt;- time_bounds.nrows()\n&quot;)
+        
+        cat(&quot;for (i in 1:n_epochs) {\n&quot;)
+        cat(&quot;\tepoch_fn = geo_fn + \&quot;.connectivity.\&quot; + i + \&quot;.txt\&quot;\n&quot;)
+        cat(&quot;\tconnectivity[i] &lt;- readDataDelimitedFile(file=epoch_fn, delimiter=\&quot; \&quot;)\n&quot;)
+        cat(&quot;}\n&quot;)
+        
+        cat(&quot;distances &lt;- readDataDelimitedFile(file=dist_fn, delimiter=\&quot; \&quot;)\n&quot;)
+        cat(&quot;tree &lt;- readTrees(tree_fn)[1]\n&quot;)
+        
+        cat(&quot;log10_rate_bg ~ dnUniform(-4,2)\n&quot;)
+        cat(&quot;log10_rate_bg.setValue(-2)\n&quot;)
+        cat(&quot;rate_bg := 10^log10_rate_bg\n&quot;)
+        cat(&quot;moves.append( mvSlide(log10_rate_bg, weight=4) )\n&quot;)
+        cat(&quot;dispersal_rate &lt;- 1.0\n&quot;)
+        
+        cat(&quot;for (i in 1:n_epochs) {\n&quot;)
+        cat(&quot;\tfor (j in 1:n_areas) {\n&quot;)
+        cat(&quot;\t\tfor (k in 1:n_areas) {\n&quot;)
+        cat(&quot;\t\t\tdr[i][j][k] &lt;- 0.0\n&quot;)
+        cat(&quot;\t\t\tif (connectivity[i][j][k] &gt; 0) {\n&quot;)
+        cat(&quot;\t\t\t\tdr[i][j][k] := dispersal_rate\n&quot;)
+        cat(&quot;\t\t\t}\n&quot;)
+        cat(&quot;\t\t}\n&quot;)
+        cat(&quot;\t}\n&quot;)
+        cat(&quot;}\n&quot;)
+        
+        cat(&quot;log_sd &lt;- 0.5\n&quot;)
+        cat(&quot;log_mean &lt;- ln(1) - 0.5*log_sd^2\n&quot;)
+        cat(&quot;extirpation_rate ~ dnLognormal(mean=log_mean, sd=log_sd)\n&quot;)
+        cat(&quot;moves.append( mvScale(extirpation_rate, weight=2) )\n&quot;)
+
+        cat(&quot;for (i in 1:n_epochs) {\n&quot;)
+        cat(&quot;\tfor (j in 1:n_areas) {\n&quot;)
+        cat(&quot;\t\tfor (k in 1:n_areas) {\n&quot;)
+        cat(&quot;\t\t\ter[i][j][k] &lt;- 0.0\n&quot;)
+        cat(&quot;\t\t}\n&quot;)
+        cat(&quot;\t\ter[i][j][k] := extirpation rate\n&quot;)
+        cat(&quot;\t}\n&quot;)
+        cat(&quot;}\n&quot;)
+        
+        
+        cat(&quot;for (i in 1:n_epochs) {\n&quot;)
+        cat(&quot;Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
+                                        extirpationRates=er[i],
+                                        maxRangeSize=max_areas)\n&quot;)
+        cat(&quot;}\n&quot;)
+
+        cat(&quot;for (i in 1:n_epochs) {\n&quot;)
+        cat(&quot;\ttime_max[i] &lt;- time_bounds[i][1]\n&quot;)
+        cat(&quot;\ttime_min[i] &lt;- time_bounds[i][2]\n&quot;)
+        cat(&quot;\tif (i != n_epochs) {\n&quot;)
+        cat(&quot;\t\tepoch_times[i] ~ dnUniform(time_min[i], time_max[i])\n&quot;)
+        cat(&quot;\t\tmoves.append( mvSlide(epoch_times[i], delta=(time_max[i]-time_min[i])/2) )\n&quot;)
+        cat(&quot;\t} else {\n&quot;)
+        cat(&quot;\t\tepoch_times &lt;- 0.0\n&quot;)
+        cat(&quot;\t}\n&quot;)
+        cat(&quot;}\n&quot;)        
+        
+        
+        cat(&quot;Q_DEC_epoch := fnEpoch(Q=Q_DEC, times=epoch_times, rates=rep(1, n_epochs))\n&quot;)
+        
+        cat(&quot;clado_event_types &lt;- [ \&quot;s\&quot;, \&quot;a\&quot; ]\n&quot;)
+        cat(&quot;p_sympatry ~ dnUniform(0,1)\n&quot;)
+        cat(&quot;p_allopatry := abs(1.0 - p_sympatry)\n&quot;)
+        cat(&quot;clado_type_probs := simplex(p_sympatry, p_allopatry)\n&quot;)
+        cat(&quot;moves.append( mvSlide(p_sympatry, weight=2) )\n&quot;)
+        cat(&quot;P_DEC := fnDECCladoProbs(eventProbs=clado_type_probs,
+                                                eventTypes=clado_event_types,
+                                                numCharacters=n_areas,
+                                                maxRangeSize=max_areas)\n&quot;)
+        
+        cat(&quot;rf_DEC &lt;- rep(0, n_states)\n&quot;)
+        cat(&quot;rf_DEC[2] &lt;- 1\n&quot;)
+        cat(&quot;rf_DEC_simp &lt;- simplex(rf_DEC)\n&quot;)
+        
+        cat(&quot;m_bg ~ dnPhyloCTMCClado(tree=tree,
+                           Q=Q_DEC_epoch,
+                           cladoProbs=P_DEC,
+                           branchRates=rate_bg,
+                           rootFrequencies=rf_DEC_simp,
+                           type=\&quot;NaturalNumbers\&quot;,
+                           nSites=1)\n&quot;)
+        cat(&quot;m_bg.clamp(dat_range_n)\n&quot;)
+        
+        cat(&quot;mymodel = model(m_bg)\n&quot;)
+        cat(&quot;mymcmc = mcmc(mymodel, monitors, moves)\n&quot;)
+        cat(&quot;mymcmc.run(n_gen)\n&quot;)
+        
+        
+        sink()
+    }
+}</code></pre>
 <p>Now we can run this for each simulation regime.</p>
 <pre class="r"><code>dir_name &lt;- c(&quot;data/0_hsrate/&quot;, &quot;data/0.1_hsrate/&quot;, &quot;data/0.05_hsrate/&quot;, &quot;data/0.025_hsrate/&quot;)
 prefix_fn &lt;- c(&quot;hsrate_0_&quot;, &quot;hsrate_0.1_&quot;, &quot;hsrate_0.05_&quot;, &quot;hsrate_0.025_&quot;)
 
 for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)
+    print_rev_script(dir_name[i], prefix_fn[i], reps)
 }</code></pre>
 <p>Now we just need to write up our Rev scripts and run them.</p>
 </div>

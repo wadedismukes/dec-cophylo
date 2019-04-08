@@ -272,7 +272,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("state_desc_str = \"state,range\"\n")
         cat("for (i in 1:state_desc.size())\n")
         cat("{\n")
-        cat("\tstate_desc_str += (i-1) + \",\" + state_desc[i] + \"\n\"\n")
+        cat("\tstate_desc_str += (i-1) + \",\" + state_desc[i] + \"\\n\"\n")
         cat("{\n")
         
         cat("write(state_desc_str, file=out_fn+\".state_labels.txt\"\n")

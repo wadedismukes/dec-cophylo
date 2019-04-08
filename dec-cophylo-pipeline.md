@@ -126,7 +126,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {28955, 23723}
+## Seeds = {39958, 23723}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -148,7 +148,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {28955, 23723}
+## Seeds = {39958, 23723}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -170,7 +170,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {28955, 23723}
+## Seeds = {39958, 23723}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -192,7 +192,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {28955, 23723}
+## Seeds = {39958, 23723}
 ```
 
 ### Creating extra datafiles for use with DEC model
@@ -373,7 +373,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         
         
         range_fn <- paste0(dir_name, prefix_fn, i, ranges_suffix_fn)
-        tree_fn <- paste0(dir_name, prefix_fn, "_pruned", i, symb_tree_suffix_fn)
+        tree_fn <- paste0(dir_name, prefix_fn, i, "_pruned", symb_tree_suffix_fn)
         out_fn <- paste0(dir_name, "output/", prefix_fn, i)
         geo_fn <- paste0(dir_name, prefix_fn, i)
 
@@ -400,10 +400,10 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("state_desc_str = \"state,range\"\n")
         cat("for (i in 1:state_desc.size())\n")
         cat("{\n")
-        cat("\tstate_desc_str += (i-1) + "," + state_desc[i] + \"\n\"\n")
-        cat("{\n")
+        cat("\tstate_desc_str += (i-1) + \",\" + state_desc[i] + \"\\n\"\n")
+        cat("}\n")
         
-        cat("write(state_desc_str, file=out_fn+\".state_labels.txt\"\n")
+        cat("write(state_desc_str, file=out_fn+\".state_labels.txt\")\n")
         
         cat("time_bounds <- readDataDelimitedFile(file=times_fn, delimiter=\" \")\n")
         cat("n_epochs <- time_bounds.nrows()\n")
@@ -443,12 +443,12 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("\t\tfor (k in 1:n_areas) {\n")
         cat("\t\t\ter[i][j][k] <- 0.0\n")
         cat("\t\t}\n")
-        cat("\t\ter[i][j][k] := extirpation rate\n")
+        cat("\t\ter[i][j][k] := extirpation_rate\n")
         cat("\t}\n")
         cat("}\n")
         
         
-        cat("for (i in 1:n_epochs) {\n")
+        cat("for (i in n_epochs:1) {\n")
         cat("Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
                                         extirpationRates=er[i],
                                         maxRangeSize=max_areas)\n")
@@ -461,7 +461,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("\t\tepoch_times[i] ~ dnUniform(time_min[i], time_max[i])\n")
         cat("\t\tmoves.append( mvSlide(epoch_times[i], delta=(time_max[i]-time_min[i])/2) )\n")
         cat("\t} else {\n")
-        cat("\t\tepoch_times <- 0.0\n")
+        cat("\t\tepoch_times[i] <- 0.0\n")
         cat("\t}\n")
         cat("}\n")        
         
@@ -491,6 +491,17 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
                            nSites=1)\n")
         cat("m_bg.clamp(dat_range_n)\n")
         
+        
+        cat("monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate) )\n")
+        cat("monitors.append( mnModel(file=out_fn+\".model.log\", printgen=10) )\n")
+        cat("monitors.append( mnFile(tree, filename=out_fn+\".tre\", printgen=10) )\n")
+        cat("monitors.append( mnJointConditionalAncestralState(tree=tree,
+                                                       ctmc=m_bg,
+                                                       type=\"NaturalNumbers\",
+                                                       withTips=true,
+                                                       withStartStates=true,
+                                                       filename=out_fn+\".states.log\",
+                                                        printgen=10) )\n")
         cat("mymodel = model(m_bg)\n")
         cat("mymcmc = mcmc(mymodel, monitors, moves)\n")
         cat("mymcmc.run(n_gen)\n")
@@ -522,3 +533,9 @@ Now we just need to write up our Rev scripts and run them.
 
 Also a test of Rev code chunks in Rmarkdown/knitr.
 
+
+
+```bash
+mkdir -p tdcken_stats/
+mv *.stats.txt tdcken_stats/
+```

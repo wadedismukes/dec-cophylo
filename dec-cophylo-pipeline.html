@@ -1674,7 +1674,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {31169, 23723}
+## Seeds = {45234, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1696,7 +1696,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {31169, 23723}
+## Seeds = {45234, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1718,7 +1718,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {31169, 23723}
+## Seeds = {45234, 23723}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1740,7 +1740,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {31169, 23723}</code></pre>
+## Seeds = {45234, 23723}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1866,7 +1866,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         
         
         range_fn &lt;- paste0(dir_name, prefix_fn, i, ranges_suffix_fn)
-        tree_fn &lt;- paste0(dir_name, prefix_fn, &quot;_pruned&quot;, i, symb_tree_suffix_fn)
+        tree_fn &lt;- paste0(dir_name, prefix_fn, i, &quot;_pruned&quot;, symb_tree_suffix_fn)
         out_fn &lt;- paste0(dir_name, &quot;output/&quot;, prefix_fn, i)
         geo_fn &lt;- paste0(dir_name, prefix_fn, i)
 
@@ -1936,12 +1936,12 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         cat(&quot;\t\tfor (k in 1:n_areas) {\n&quot;)
         cat(&quot;\t\t\ter[i][j][k] &lt;- 0.0\n&quot;)
         cat(&quot;\t\t}\n&quot;)
-        cat(&quot;\t\ter[i][j][k] := extirpation rate\n&quot;)
+        cat(&quot;\t\ter[i][j][j] := extirpation_rate\n&quot;)
         cat(&quot;\t}\n&quot;)
         cat(&quot;}\n&quot;)
         
         
-        cat(&quot;for (i in 1:n_epochs) {\n&quot;)
+        cat(&quot;for (i in n_epochs:1) {\n&quot;)
         cat(&quot;Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
                                         extirpationRates=er[i],
                                         maxRangeSize=max_areas)\n&quot;)
@@ -1954,7 +1954,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         cat(&quot;\t\tepoch_times[i] ~ dnUniform(time_min[i], time_max[i])\n&quot;)
         cat(&quot;\t\tmoves.append( mvSlide(epoch_times[i], delta=(time_max[i]-time_min[i])/2) )\n&quot;)
         cat(&quot;\t} else {\n&quot;)
-        cat(&quot;\t\tepoch_times &lt;- 0.0\n&quot;)
+        cat(&quot;\t\tepoch_times[i] &lt;- 0.0\n&quot;)
         cat(&quot;\t}\n&quot;)
         cat(&quot;}\n&quot;)        
         
@@ -1984,6 +1984,17 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
                            nSites=1)\n&quot;)
         cat(&quot;m_bg.clamp(dat_range_n)\n&quot;)
         
+        
+        cat(&quot;monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate) )\n&quot;)
+        cat(&quot;monitors.append( mnModel(file=out_fn+\&quot;.model.log\&quot;, printgen=10) )\n&quot;)
+        cat(&quot;monitors.append( mnFile(tree, filename=out_fn+\&quot;.tre\&quot;, printgen=10) )\n&quot;)
+        cat(&quot;monitors.append( mnJointConditionalAncestralState(tree=tree,
+                                                       ctmc=m_bg,
+                                                       type=\&quot;NaturalNumbers\&quot;,
+                                                       withTips=true,
+                                                       withStartStates=true,
+                                                       filename=out_fn+\&quot;.states.log\&quot;,
+                                                        printgen=10) )\n&quot;)
         cat(&quot;mymodel = model(m_bg)\n&quot;)
         cat(&quot;mymcmc = mcmc(mymodel, monitors, moves)\n&quot;)
         cat(&quot;mymcmc.run(n_gen)\n&quot;)

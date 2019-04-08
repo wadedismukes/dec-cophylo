@@ -1,5 +1,5 @@
 range_fn = "data/0.1_hsrate/hsrate_0.1_1.range.nex"
-tree_fn = "data/0.1_hsrate/hsrate_0.1__pruned1_0.loc.tre"
+tree_fn = "data/0.1_hsrate/hsrate_0.1_1_pruned_0.loc.tre"
 out_fn = "data/0.1_hsrate/output/hsrate_0.1_1"
 geo_fn = "data/0.1_hsrate/hsrate_0.1_1"
 times_fn = geo_fn + ".times.txt"
@@ -52,10 +52,10 @@ for (i in 1:n_epochs) {
 		for (k in 1:n_areas) {
 			er[i][j][k] <- 0.0
 		}
-		er[i][j][k] := extirpation rate
+		er[i][j][j] := extirpation_rate
 	}
 }
-for (i in 1:n_epochs) {
+for (i in n_epochs:1) {
 Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
                                         extirpationRates=er[i],
                                         maxRangeSize=max_areas)
@@ -67,7 +67,7 @@ for (i in 1:n_epochs) {
 		epoch_times[i] ~ dnUniform(time_min[i], time_max[i])
 		moves.append( mvSlide(epoch_times[i], delta=(time_max[i]-time_min[i])/2) )
 	} else {
-		epoch_times <- 0.0
+		epoch_times[i] <- 0.0
 	}
 }
 Q_DEC_epoch := fnEpoch(Q=Q_DEC, times=epoch_times, rates=rep(1, n_epochs))
@@ -91,6 +91,16 @@ m_bg ~ dnPhyloCTMCClado(tree=tree,
                            type="NaturalNumbers",
                            nSites=1)
 m_bg.clamp(dat_range_n)
+monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate) )
+monitors.append( mnModel(file=out_fn+".model.log", printgen=10) )
+monitors.append( mnFile(tree, filename=out_fn+".tre", printgen=10) )
+monitors.append( mnJointConditionalAncestralState(tree=tree,
+                                                       ctmc=m_bg,
+                                                       type="NaturalNumbers",
+                                                       withTips=true,
+                                                       withStartStates=true,
+                                                       filename=out_fn+".states.log",
+                                                        printgen=10) )
 mymodel = model(m_bg)
 mymcmc = mcmc(mymodel, monitors, moves)
 mymcmc.run(n_gen)

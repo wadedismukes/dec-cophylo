@@ -5,7 +5,6 @@ treeducken/*
 Pipfile
 Pipfile.lock
 *.nex
-*.Rev
 *.html
 .RData
 .Rhistory

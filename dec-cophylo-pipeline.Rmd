@@ -385,7 +385,6 @@ for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)
     print_rev_script(dir_name[i], prefix_fn[i], reps)
 }
-
 ```
 
 Now we just need to write up our Rev scripts and run them.
@@ -395,3 +394,8 @@ Now we just need to write up our Rev scripts and run them.
 
 Also a test of Rev code chunks in Rmarkdown/knitr.
 
+
+```{bash, move-stats-files}
+mkdir -p tdcken_stats/
+mv *.stats.txt tdcken_stats/
+```

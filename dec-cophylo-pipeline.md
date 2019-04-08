@@ -126,7 +126,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {33645, 23718}
+## Seeds = {28955, 23723}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -148,7 +148,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {33645, 23718}
+## Seeds = {28955, 23723}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -170,7 +170,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {33645, 23718}
+## Seeds = {28955, 23723}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -192,7 +192,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {33645, 23718}
+## Seeds = {28955, 23723}
 ```
 
 ### Creating extra datafiles for use with DEC model
@@ -207,15 +207,31 @@ library(phytools)
 ```
 
 ```
+## Warning: package 'phytools' was built under R version 3.4.4
+```
+
+```
 ## Loading required package: ape
+```
+
+```
+## Warning: package 'ape' was built under R version 3.4.4
 ```
 
 ```
 ## Loading required package: maps
 ```
 
+```
+## Warning: package 'maps' was built under R version 3.4.4
+```
+
 ```r
 library(stringr)
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.4.4
 ```
 
     also installing the dependencies ‘magick’, ‘igraph’, ‘fastmatch’, ‘ape’, ‘maps’, ‘animation’, ‘clusterGeneration’, ‘coda’, ‘combinat’, ‘expm’, ‘numDeriv’, ‘phangorn’, ‘plotrix’, ‘scatterplot3d’
@@ -381,7 +397,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         
         cat("dat_range_n = formatDiscreteCharacterData(dat_range_01, \"DEC\", n_states)\n")
         cat("state_desc = dat_range_n.getStateDescriptions()\n")
-        cat("state_desc_str = \"state,range\n\"\n")
+        cat("state_desc_str = \"state,range\"\n")
         cat("for (i in 1:state_desc.size())\n")
         cat("{\n")
         cat("\tstate_desc_str += (i-1) + "," + state_desc[i] + \"\n\"\n")

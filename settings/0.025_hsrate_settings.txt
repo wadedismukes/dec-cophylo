@@ -1,0 +1,13 @@
+-sbr 0.05
+-sdr 0.025
+-gbr 0
+-gdr 0
+-lgtr 0.025
+-ipp 1
+-nt 5
+-r 10
+-ne 1
+-nl 1
+-ng 1
+-o hsrate_0.025
+-sout 0

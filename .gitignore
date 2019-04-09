@@ -1,10 +1,8 @@
 *.tre
-*.txt
 .ipynb_checkpoints/*
 treeducken/*
 Pipfile
 Pipfile.lock
-*.nex
 *.html
 .RData
 .Rhistory

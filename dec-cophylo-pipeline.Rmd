@@ -45,7 +45,7 @@ chosen to mimic the Geomyidae gophers and their chewing lice parasites.
 
 
 ```{r}
-nt<- 5
+nt <- 12
 turnover <- 0.5
 br <- 0.05
 dr <- 0.025
@@ -388,7 +388,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
 
 Now we can run this for each simulation regime. 
 
-```{r}
+```{r print-data-files-and-scripts}
 dir_name <- c("data/0_hsrate/", "data/0.1_hsrate/", "data/0.05_hsrate/", "data/0.025_hsrate/")
 prefix_fn <- c("hsrate_0_", "hsrate_0.1_", "hsrate_0.05_", "hsrate_0.025_")
 

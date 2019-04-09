@@ -1,8 +1,8 @@
 Species Tree Statistics
-Tree depth	21.3321
-Extant Tree depth	21.3321
+Tree depth	30.4693
+Extant Tree depth	30.4693
 Avaerage Transfers	0
 Average Duplications	0
 Average Losses	0
 Average generations of gene trees per locus tree
-Locus Tree 0	30.4515
+Locus Tree 0	52.1323

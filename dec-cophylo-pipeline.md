@@ -47,7 +47,7 @@ chosen to mimic the Geomyidae gophers and their chewing lice parasites.
 
 
 ```r
-nt<- 5
+nt <- 12
 turnover <- 0.5
 br <- 0.05
 dr <- 0.025
@@ -88,7 +88,20 @@ find ./settings/ -name "*_settings.txt" | xargs basename -s "_settings.txt" | xa
 ```
 
 ```
-## already installed!
+## Cloning into 'treeducken'...
+## printf '#ifndef GIT_HASH\n#define GIT_HASH "' > GitVersion.h && \
+## 	git rev-parse HEAD | tr -d "\n" >> GitVersion.h && \
+## 	printf  '"\n#endif' >> GitVersion.h
+## g++ -g -Wall -std=c++11 -c Treeducken.cpp
+## g++ -g -Wall -std=c++11 -c SpeciesTree.cpp
+## g++ -g -Wall -std=c++11 -c Simulator.cpp
+## g++ -g -Wall -std=c++11 -c GeneTree.cpp
+## g++ -g -Wall -std=c++11 -c LocusTree.cpp
+## g++ -g -Wall -std=c++11 -c MbRandom.cpp
+## g++ -g -Wall -std=c++11 -c Tree.cpp
+## g++ -g -Wall -std=c++11 -c Engine.cpp
+## g++ -o ../treeducken Treeducken.o SpeciesTree.o Simulator.o GeneTree.o LocusTree.o MbRandom.o Tree.o Engine.o
+## mv: rename *_settings.txt to settings/*_settings.txt: No such file or directory
 ```
 
 Now run the simulations! 
@@ -111,7 +124,7 @@ done
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ## 		output file name prefix         = hsrate_0.025
-## 		Number of extant taxa           = 5
+## 		Number of extant taxa           = 12
 ## 		Number of replicates            = 10
 ## 		Number of loci to simulate      = 1
 ## 		Number of genes to simulate     = 1
@@ -126,14 +139,16 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {47727, 23724}
+## Seeds = {274, 23725}
+## usage: mv [-f | -i | -n] [-v] source target
+##        mv [-f | -i | -n] [-v] source ... directory
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ## 		output file name prefix         = hsrate_0.05
-## 		Number of extant taxa           = 5
+## 		Number of extant taxa           = 12
 ## 		Number of replicates            = 10
 ## 		Number of loci to simulate      = 1
 ## 		Number of genes to simulate     = 1
@@ -148,14 +163,16 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {47742, 23724}
+## Seeds = {274, 23725}
+## usage: mv [-f | -i | -n] [-v] source target
+##        mv [-f | -i | -n] [-v] source ... directory
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ## 		output file name prefix         = hsrate_0.1
-## 		Number of extant taxa           = 5
+## 		Number of extant taxa           = 12
 ## 		Number of replicates            = 10
 ## 		Number of loci to simulate      = 1
 ## 		Number of genes to simulate     = 1
@@ -170,14 +187,16 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {47756, 23724}
+## Seeds = {274, 23725}
+## usage: mv [-f | -i | -n] [-v] source target
+##        mv [-f | -i | -n] [-v] source ... directory
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ## 		output file name prefix         = hsrate_0
-## 		Number of extant taxa           = 5
+## 		Number of extant taxa           = 12
 ## 		Number of replicates            = 10
 ## 		Number of loci to simulate      = 1
 ## 		Number of genes to simulate     = 1
@@ -192,7 +211,9 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {47769, 23724}
+## Seeds = {275, 23725}
+## usage: mv [-f | -i | -n] [-v] source target
+##        mv [-f | -i | -n] [-v] source ... directory
 ```
 
 ### Creating extra datafiles for use with DEC model
@@ -207,21 +228,31 @@ library(phytools)
 ```
 
 ```
+## Warning: package 'phytools' was built under R version 3.4.4
+```
+
+```
 ## Loading required package: ape
 ```
 
 ```
-## Error: package or namespace load failed for 'ape' in dyn.load(file, DLLpath = DLLpath, ...):
-##  unable to load shared object '/home/waded/R/x86_64-pc-linux-gnu-library/3.5/ape/libs/ape.so':
-##   libgfortran.so.4: cannot open shared object file: No such file or directory
+## Warning: package 'ape' was built under R version 3.4.4
 ```
 
 ```
-## Error: package 'ape' could not be loaded
+## Loading required package: maps
+```
+
+```
+## Warning: package 'maps' was built under R version 3.4.4
 ```
 
 ```r
 library(stringr)
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.4.4
 ```
 
     also installing the dependencies ‘magick’, ‘igraph’, ‘fastmatch’, ‘ape’, ‘maps’, ‘animation’, ‘clusterGeneration’, ‘coda’, ‘combinat’, ‘expm’, ‘numDeriv’, ‘phangorn’, ‘plotrix’, ‘scatterplot3d’
@@ -517,7 +548,12 @@ for(i in 1:length(dir_name)){
 ```
 
 ```
-## Error in read.nexus(host_fn): could not find function "read.nexus"
+## Warning in file(file, "r"): cannot open file 'data/0_hsrate/
+## hsrate_0_0.sp.tre': No such file or directory
+```
+
+```
+## Error in file(file, "r"): cannot open the connection
 ```
 
 Now we just need to write up our Rev scripts and run them.

@@ -9,7 +9,7 @@ monitors = VectorMonitors()
 n_gen = 10000
 dat_range_01 = readDiscreteCharacterData(range_fn)
 n_areas <- dat_range_01.nchar()
-max_areas <- 2
+max_areas <- 5
 n_states <- 0
 for (k in 0:max_areas) n_states += choose(n_areas, k)
 dat_range_n = formatDiscreteCharacterData(dat_range_01, "DEC", n_states)

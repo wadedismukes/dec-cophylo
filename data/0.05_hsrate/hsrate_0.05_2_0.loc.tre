@@ -1,0 +1,4 @@
+#NEXUS
+begin trees;
+    tree locT_0 = (((T3_1[&index=3]:3.72825,T4_1[&index=4]:3.72825)[&index=2]:8.66011,((T7_1[&index=7]:6.47452,T8_1[&index=8]:6.47452)[&index=6]:0.183227,T9_1[&index=9]:6.65774)[&index=5]:5.73061)[&index=1]:11.8213,X10_1[&index=10]:4.48781);
+end;

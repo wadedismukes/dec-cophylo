@@ -1,4 +1,3 @@
-*.tre
 .ipynb_checkpoints/*
 treeducken/*
 Pipfile
@@ -7,3 +6,6 @@ Pipfile.lock
 .RData
 .Rhistory
 slurm*
+*.sp.tre
+*.sp.full.tre
+*genetrees*.tre

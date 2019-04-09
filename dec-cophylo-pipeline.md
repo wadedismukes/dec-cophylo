@@ -126,7 +126,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {39958, 23723}
+## Seeds = {47727, 23724}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -148,7 +148,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {39958, 23723}
+## Seeds = {47742, 23724}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -170,7 +170,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {39958, 23723}
+## Seeds = {47756, 23724}
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
@@ -192,7 +192,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {39958, 23723}
+## Seeds = {47769, 23724}
 ```
 
 ### Creating extra datafiles for use with DEC model
@@ -207,31 +207,21 @@ library(phytools)
 ```
 
 ```
-## Warning: package 'phytools' was built under R version 3.4.4
-```
-
-```
 ## Loading required package: ape
 ```
 
 ```
-## Warning: package 'ape' was built under R version 3.4.4
+## Error: package or namespace load failed for 'ape' in dyn.load(file, DLLpath = DLLpath, ...):
+##  unable to load shared object '/home/waded/R/x86_64-pc-linux-gnu-library/3.5/ape/libs/ape.so':
+##   libgfortran.so.4: cannot open shared object file: No such file or directory
 ```
 
 ```
-## Loading required package: maps
-```
-
-```
-## Warning: package 'maps' was built under R version 3.4.4
+## Error: package 'ape' could not be loaded
 ```
 
 ```r
 library(stringr)
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.4.4
 ```
 
     also installing the dependencies ‘magick’, ‘igraph’, ‘fastmatch’, ‘ape’, ‘maps’, ‘animation’, ‘clusterGeneration’, ‘coda’, ‘combinat’, ‘expm’, ‘numDeriv’, ‘phangorn’, ‘plotrix’, ‘scatterplot3d’
@@ -391,7 +381,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("dat_range_01 = readDiscreteCharacterData(range_fn)\n")
         cat("n_areas <- dat_range_01.nchar()\n")
         
-        cat("max_areas <- 2\n")
+        cat("max_areas <- 5\n")
         cat("n_states <- 0\n")
         cat("for (k in 0:max_areas) n_states += choose(n_areas, k)\n")
         
@@ -443,7 +433,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("\t\tfor (k in 1:n_areas) {\n")
         cat("\t\t\ter[i][j][k] <- 0.0\n")
         cat("\t\t}\n")
-        cat("\t\ter[i][j][k] := extirpation_rate\n")
+        cat("\t\ter[i][j][j] := extirpation_rate\n")
         cat("\t}\n")
         cat("}\n")
         
@@ -524,6 +514,10 @@ for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)
     print_rev_script(dir_name[i], prefix_fn[i], reps)
 }
+```
+
+```
+## Error in read.nexus(host_fn): could not find function "read.nexus"
 ```
 
 Now we just need to write up our Rev scripts and run them.

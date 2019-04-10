@@ -80,7 +80,8 @@ else
 fi
 
 #make directory structure
-mkdir -p settings/ && mv *_settings.txt settings/
+mkdir -p settings/
+mv *_settings.txt settings/
 find ./settings/ -name "*_settings.txt" | xargs basename -s "_settings.txt" | xargs -I {} mkdir -p ./data/{}
 ```
 
@@ -89,11 +90,16 @@ Now run the simulations!
 
 ```{bash}
 
-for f in settings/*_settings.txt
+for f in $(basename -s "_settings.txt" settings/*)
 do
-    treeducken/treeducken -i $f
-    mv *.tre ./data/$(basename -s "_settings.txt" $f)
+    prefix=$f
+    suffix="_settings.txt"
+    input_fn=settings/$prefix$suffix
+    echo $input_fn
+    treeducken/treeducken -i $input_fn
+    mv *.tre ./data/$prefix/
 done
+
 ```
 
 ### Creating extra datafiles for use with DEC model

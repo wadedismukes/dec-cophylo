@@ -1643,17 +1643,24 @@ else
 fi
 
 #make directory structure
-mkdir -p settings/ &amp;&amp; mv *_settings.txt settings/
+mkdir -p settings/
+mv *_settings.txt settings/
 find ./settings/ -name &quot;*_settings.txt&quot; | xargs basename -s &quot;_settings.txt&quot; | xargs -I {} mkdir -p ./data/{}</code></pre>
 <pre><code>## already installed!</code></pre>
 <p>Now run the simulations!</p>
 <pre class="bash"><code>
-for f in settings/*_settings.txt
+for f in $(basename -s &quot;_settings.txt&quot; settings/*)
 do
-    treeducken/treeducken -i $f
-    mv *.tre ./data/$(basename -s &quot;_settings.txt&quot; $f)
-done</code></pre>
-<pre><code>## ############################################################
+    prefix=$f
+    suffix=&quot;_settings.txt&quot;
+    input_fn=settings/$prefix$suffix
+    echo $input_fn
+    treeducken/treeducken -i $input_fn
+    mv *.tre ./data/$prefix/
+done
+</code></pre>
+<pre><code>## settings/0.025_hsrate_settings.txt
+## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
 ## ############################################################
@@ -1674,7 +1681,8 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {6229, 23726}
+## Seeds = {9553, 23726}
+## settings/0.05_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1696,7 +1704,8 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {6229, 23726}
+## Seeds = {9553, 23726}
+## settings/0.1_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1718,7 +1727,8 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {6229, 23726}
+## Seeds = {9553, 23726}
+## settings/0_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
@@ -1740,7 +1750,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {6229, 23726}</code></pre>
+## Seeds = {9554, 23726}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>

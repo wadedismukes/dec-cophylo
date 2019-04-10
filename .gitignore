@@ -9,3 +9,6 @@ slurm*
 *.sp.tre
 *.sp.full.tre
 *genetrees*.tre
+*.md
+history.txt
+*.stats.txt

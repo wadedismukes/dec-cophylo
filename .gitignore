@@ -1,4 +1,6 @@
 .ipynb_checkpoints/*
+*.txt
+*.tre
 treeducken/*
 Pipfile
 Pipfile.lock
@@ -12,3 +14,6 @@ slurm*
 *.md
 history.txt
 *.stats.txt
+data/*
+output/*
+tdcken_stats/*

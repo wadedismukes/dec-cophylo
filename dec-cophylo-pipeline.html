@@ -1611,7 +1611,7 @@ settings_writer &lt;- function(settings_list, file_begin){
 <div id="setting-simulation-parameters-and-printing-files" class="section level3">
 <h3>Setting simulation parameters and printing files</h3>
 <p>Here I have set the model parameters to be printed into settings files at the top. The for loop generates the number of regimes I want to simulate under. The number of tips and timing (13 here corresponding to 13 million years ago (mya)) were chosen to mimic the Geomyidae gophers and their chewing lice parasites.</p>
-<pre class="r"><code>nt&lt;- 5
+<pre class="r"><code>nt &lt;- 10
 turnover &lt;- 0.5
 br &lt;- 0.05
 dr &lt;- 0.025
@@ -1659,7 +1659,7 @@ done</code></pre>
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0.025
-##      Number of extant taxa           = 5
+##      Number of extant taxa           = 10
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
@@ -1674,14 +1674,14 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {45234, 23723}
+## Seeds = {6229, 23726}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0.05
-##      Number of extant taxa           = 5
+##      Number of extant taxa           = 10
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
@@ -1696,14 +1696,14 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {45234, 23723}
+## Seeds = {6229, 23726}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0.1
-##      Number of extant taxa           = 5
+##      Number of extant taxa           = 10
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
@@ -1718,14 +1718,14 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {45234, 23723}
+## Seeds = {6229, 23726}
 ## ############################################################
 ## #### treeducken, version 0.1             ####
 ## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0
-##      Number of extant taxa           = 5
+##      Number of extant taxa           = 10
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
@@ -1740,7 +1740,7 @@ done</code></pre>
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {45234, 23723}</code></pre>
+## Seeds = {6229, 23726}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1879,7 +1879,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
 
         cat(&quot;moves = VectorMoves()\n&quot;)
         cat(&quot;monitors = VectorMonitors()\n&quot;)
-        cat(&quot;n_gen = 10000\n&quot;)
+        cat(&quot;n_gen = 200\n&quot;)
 
         cat(&quot;dat_range_01 = readDiscreteCharacterData(range_fn)\n&quot;)
         cat(&quot;n_areas &lt;- dat_range_01.nchar()\n&quot;)

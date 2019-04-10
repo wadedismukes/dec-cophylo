@@ -6,7 +6,7 @@ times_fn = geo_fn + ".times.txt"
 dist_fn  = geo_fn + ".distances.txt"
 moves = VectorMoves()
 monitors = VectorMonitors()
-n_gen = 10000
+n_gen = 200
 dat_range_01 = readDiscreteCharacterData(range_fn)
 n_areas <- dat_range_01.nchar()
 max_areas <- 2

@@ -5,7 +5,7 @@
 -lgtr 0.05
 -ipp 1
 -nt 12
--r 10
+-r 100
 -ne 1
 -nl 1
 -ng 1

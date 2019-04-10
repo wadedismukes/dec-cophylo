@@ -52,7 +52,7 @@ dr <- 0.025
 trr <- as.vector(c(0.0, 0.025, 0.05, 0.1))
 gbr <- 0.0
 gdr <- 0.0
-reps <- 10
+reps <- 100
 nl <- 1
 ng <- 1
 ipp <- 1
@@ -263,7 +263,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("dat_range_01 = readDiscreteCharacterData(range_fn)\n")
         cat("n_areas <- dat_range_01.nchar()\n")
         
-        cat("max_areas <- 5\n")
+        cat("max_areas <- 2\n")
         cat("n_states <- 0\n")
         cat("for (k in 0:max_areas) n_states += choose(n_areas, k)\n")
         

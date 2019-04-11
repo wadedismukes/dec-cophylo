@@ -313,7 +313,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("log_sd <- 0.5\n")
         cat("log_mean <- ln(1) - 0.5*log_sd^2\n")
         cat("dispersal_rate ~ dnLognormal(mean=log_mean, sd=log_sd)\n")
-        cat("moves.append( mvScale(extirpation_rate, weight=5) )\n")
+        cat("moves.append( mvScale(dispersal_rate, weight=5) )\n")
 
 
 

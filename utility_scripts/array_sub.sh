@@ -18,4 +18,4 @@ module load revbayes
 rb=$1
 sub=$2
 
-$rb rev-scripts/$sub/run_epoch_$(echo $sub)_$(echo $SLURM_ARRAY_TASK_ID).Rev 
+$rb run_epoch_$(echo $sub)_$(echo $SLURM_ARRAY_TASK_ID).Rev 

@@ -78,7 +78,9 @@ if [ ! -d treeducken/ ]; then
 else
     echo 'already installed!'
 fi
+```
 
+```{bash}
 #make directory structure
 mkdir -p settings/
 mv *_settings.txt settings/
@@ -245,6 +247,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
     ranges_suffix_fn <- ".range.nex"
     
     for(i in 0:(reps-1)){
+	print("poop")	
         rev_out_fn <- paste0(rev_script_dir, "run_epoch_", prefix_fn, i, ".Rev")
         system2("touch", args = rev_out_fn)
         sink(rev_out_fn)
@@ -264,7 +267,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
 
         cat("moves = VectorMoves()\n")
         cat("monitors = VectorMonitors()\n")
-        cat("n_gen = 200\n")
+        cat("n_gen = 5000\n")
 
         cat("dat_range_01 = readDiscreteCharacterData(range_fn)\n")
         cat("n_areas <- dat_range_01.nchar()\n")
@@ -294,12 +297,20 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("distances <- readDataDelimitedFile(file=dist_fn, delimiter=\" \")\n")
         cat("tree <- readTrees(tree_fn)[1]\n")
         
-        cat("log10_rate_bg ~ dnUniform(-4,2)\n")
-        cat("log10_rate_bg.setValue(-2)\n")
-        cat("rate_bg := 10^log10_rate_bg\n")
-        cat("moves.append( mvSlide(log10_rate_bg, weight=4) )\n")
-        cat("dispersal_rate <- 1.0\n")
-        
+        #cat("log10_rate_bg ~ dnUniform(-4,2)\n")
+        #cat("log10_rate_bg.setValue(-2)\n")
+        #cat("rate_bg := 10^log10_rate_bg\n")
+        #cat("moves.append( mvSlide(log10_rate_bg, weight=4) )\n")
+
+	cat("rate_bg <- 1.0")
+
+        cat("log_sd <- 0.5\n")
+        cat("log_mean <- ln(1) - 0.5*log_sd^2\n")
+        cat("dispersal_rate ~ dnLognormal(mean=log_mean, sd=log_sd)\n")
+        cat("moves.append( mvScale(extirpation_rate, weight=5) )\n")
+
+
+
         cat("for (i in 1:n_epochs) {\n")
         cat("\tfor (j in 1:n_areas) {\n")
         cat("\t\tfor (k in 1:n_areas) {\n")
@@ -314,7 +325,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("log_sd <- 0.5\n")
         cat("log_mean <- ln(1) - 0.5*log_sd^2\n")
         cat("extirpation_rate ~ dnLognormal(mean=log_mean, sd=log_sd)\n")
-        cat("moves.append( mvScale(extirpation_rate, weight=2) )\n")
+        cat("moves.append( mvScale(extirpation_rate, weight=5) )\n")
 
         cat("for (i in 1:n_epochs) {\n")
         cat("\tfor (j in 1:n_areas) {\n")

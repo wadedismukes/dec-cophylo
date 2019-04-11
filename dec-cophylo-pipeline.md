@@ -47,7 +47,7 @@ chosen to mimic the Geomyidae gophers and their chewing lice parasites.
 
 
 ```r
-nt <- 12
+nt <- 10
 turnover <- 0.5
 br <- 0.05
 dr <- 0.025
@@ -81,27 +81,18 @@ if [ ! -d treeducken/ ]; then
 else
     echo 'already installed!'
 fi
+```
 
+```
+## already installed!
+```
+
+
+```bash
 #make directory structure
-mkdir -p settings/ && mv *_settings.txt settings/
+mkdir -p settings/
+mv *_settings.txt settings/
 find ./settings/ -name "*_settings.txt" | xargs basename -s "_settings.txt" | xargs -I {} mkdir -p ./data/{}
-```
-
-```
-## Cloning into 'treeducken'...
-## printf '#ifndef GIT_HASH\n#define GIT_HASH "' > GitVersion.h && \
-## 	git rev-parse HEAD | tr -d "\n" >> GitVersion.h && \
-## 	printf  '"\n#endif' >> GitVersion.h
-## g++ -g -Wall -std=c++11 -c Treeducken.cpp
-## g++ -g -Wall -std=c++11 -c SpeciesTree.cpp
-## g++ -g -Wall -std=c++11 -c Simulator.cpp
-## g++ -g -Wall -std=c++11 -c GeneTree.cpp
-## g++ -g -Wall -std=c++11 -c LocusTree.cpp
-## g++ -g -Wall -std=c++11 -c MbRandom.cpp
-## g++ -g -Wall -std=c++11 -c Tree.cpp
-## g++ -g -Wall -std=c++11 -c Engine.cpp
-## g++ -o ../treeducken Treeducken.o SpeciesTree.o Simulator.o GeneTree.o LocusTree.o MbRandom.o Tree.o Engine.o
-## mv: rename *_settings.txt to settings/*_settings.txt: No such file or directory
 ```
 
 Now run the simulations! 
@@ -110,21 +101,27 @@ Now run the simulations!
 
 ```bash
 
-for f in settings/*_settings.txt
+for f in $(basename -s "_settings.txt" settings/*)
 do
-    treeducken/treeducken -i $f
-    mv *.tre ./data/$(basename -s "_settings.txt" $f)
+    prefix=$f
+    suffix="_settings.txt"
+    input_fn=settings/$prefix$suffix
+    echo $input_fn
+    treeducken/treeducken -i $input_fn
+    mv *.tre ./data/$prefix/
 done
+
 ```
 
 ```
+## settings/0.025_hsrate_settings.txt
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ## 		output file name prefix         = hsrate_0.025
-## 		Number of extant taxa           = 12
+## 		Number of extant taxa           = 10
 ## 		Number of replicates            = 10
 ## 		Number of loci to simulate      = 1
 ## 		Number of genes to simulate     = 1
@@ -139,16 +136,15 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {274, 23725}
-## usage: mv [-f | -i | -n] [-v] source target
-##        mv [-f | -i | -n] [-v] source ... directory
+## Seeds = {25167, 23727}
+## settings/0.05_hsrate_settings.txt
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ## 		output file name prefix         = hsrate_0.05
-## 		Number of extant taxa           = 12
+## 		Number of extant taxa           = 10
 ## 		Number of replicates            = 10
 ## 		Number of loci to simulate      = 1
 ## 		Number of genes to simulate     = 1
@@ -163,16 +159,15 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {274, 23725}
-## usage: mv [-f | -i | -n] [-v] source target
-##        mv [-f | -i | -n] [-v] source ... directory
+## Seeds = {25184, 23727}
+## settings/0.1_hsrate_settings.txt
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ## 		output file name prefix         = hsrate_0.1
-## 		Number of extant taxa           = 12
+## 		Number of extant taxa           = 10
 ## 		Number of replicates            = 10
 ## 		Number of loci to simulate      = 1
 ## 		Number of genes to simulate     = 1
@@ -187,16 +182,15 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {274, 23725}
-## usage: mv [-f | -i | -n] [-v] source target
-##        mv [-f | -i | -n] [-v] source ... directory
+## Seeds = {25199, 23727}
+## settings/0_hsrate_settings.txt
 ## ############################################################
 ## ####	treeducken, version 0.1 			####
 ## ####	e845a82c08ba308f75f94a270b81a36870299b94	####
 ## ############################################################
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ## 		output file name prefix         = hsrate_0
-## 		Number of extant taxa           = 12
+## 		Number of extant taxa           = 10
 ## 		Number of replicates            = 10
 ## 		Number of loci to simulate      = 1
 ## 		Number of genes to simulate     = 1
@@ -211,9 +205,7 @@ done
 ## 		Species tree input as newick    = 
 ## 		Tree scale                      = -1
 ## 
-## Seeds = {275, 23725}
-## usage: mv [-f | -i | -n] [-v] source target
-##        mv [-f | -i | -n] [-v] source ... directory
+## Seeds = {25215, 23727}
 ```
 
 ### Creating extra datafiles for use with DEC model
@@ -228,31 +220,21 @@ library(phytools)
 ```
 
 ```
-## Warning: package 'phytools' was built under R version 3.4.4
-```
-
-```
 ## Loading required package: ape
 ```
 
 ```
-## Warning: package 'ape' was built under R version 3.4.4
+## Error: package or namespace load failed for 'ape' in dyn.load(file, DLLpath = DLLpath, ...):
+##  unable to load shared object '/home/waded/R/x86_64-pc-linux-gnu-library/3.5/ape/libs/ape.so':
+##   libgfortran.so.4: cannot open shared object file: No such file or directory
 ```
 
 ```
-## Loading required package: maps
-```
-
-```
-## Warning: package 'maps' was built under R version 3.4.4
+## Error: package 'ape' could not be loaded
 ```
 
 ```r
 library(stringr)
-```
-
-```
-## Warning: package 'stringr' was built under R version 3.4.4
 ```
 
     also installing the dependencies ‘magick’, ‘igraph’, ‘fastmatch’, ‘ape’, ‘maps’, ‘animation’, ‘clusterGeneration’, ‘coda’, ‘combinat’, ‘expm’, ‘numDeriv’, ‘phangorn’, ‘plotrix’, ‘scatterplot3d’
@@ -388,6 +370,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
     ranges_suffix_fn <- ".range.nex"
     
     for(i in 0:(reps-1)){
+	print("poop")	
         rev_out_fn <- paste0(rev_script_dir, "run_epoch_", prefix_fn, i, ".Rev")
         system2("touch", args = rev_out_fn)
         sink(rev_out_fn)
@@ -407,12 +390,12 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
 
         cat("moves = VectorMoves()\n")
         cat("monitors = VectorMonitors()\n")
-        cat("n_gen = 10000\n")
+        cat("n_gen = 5000\n")
 
         cat("dat_range_01 = readDiscreteCharacterData(range_fn)\n")
         cat("n_areas <- dat_range_01.nchar()\n")
         
-        cat("max_areas <- 5\n")
+        cat("max_areas <- 2\n")
         cat("n_states <- 0\n")
         cat("for (k in 0:max_areas) n_states += choose(n_areas, k)\n")
         
@@ -437,12 +420,18 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("distances <- readDataDelimitedFile(file=dist_fn, delimiter=\" \")\n")
         cat("tree <- readTrees(tree_fn)[1]\n")
         
-        cat("log10_rate_bg ~ dnUniform(-4,2)\n")
-        cat("log10_rate_bg.setValue(-2)\n")
-        cat("rate_bg := 10^log10_rate_bg\n")
-        cat("moves.append( mvSlide(log10_rate_bg, weight=4) )\n")
-        cat("dispersal_rate <- 1.0\n")
-        
+        #cat("log10_rate_bg ~ dnUniform(-4,2)\n")
+        #cat("log10_rate_bg.setValue(-2)\n")
+        #cat("rate_bg := 10^log10_rate_bg\n")
+        #cat("moves.append( mvSlide(log10_rate_bg, weight=4) )\n")
+
+	cat("rate_bg <- 1.0")
+
+        cat("log_sd <- 0.5\n")
+        cat("log_mean <- ln(1) - 0.5*log_sd^2\n")
+        cat("dispersal_rate ~ dnLognormal(mean=log_mean, sd=log_sd)\n")
+        cat("moves.append( mvScale(extirpation_rate, weight=5) )\n")
+
         cat("for (i in 1:n_epochs) {\n")
         cat("\tfor (j in 1:n_areas) {\n")
         cat("\t\tfor (k in 1:n_areas) {\n")
@@ -457,7 +446,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("log_sd <- 0.5\n")
         cat("log_mean <- ln(1) - 0.5*log_sd^2\n")
         cat("extirpation_rate ~ dnLognormal(mean=log_mean, sd=log_sd)\n")
-        cat("moves.append( mvScale(extirpation_rate, weight=2) )\n")
+        cat("moves.append( mvScale(extirpation_rate, weight=5) )\n")
 
         cat("for (i in 1:n_epochs) {\n")
         cat("\tfor (j in 1:n_areas) {\n")
@@ -548,12 +537,7 @@ for(i in 1:length(dir_name)){
 ```
 
 ```
-## Warning in file(file, "r"): cannot open file 'data/0_hsrate/
-## hsrate_0_0.sp.tre': No such file or directory
-```
-
-```
-## Error in file(file, "r"): cannot open the connection
+## Error in read.nexus(host_fn): could not find function "read.nexus"
 ```
 
 Now we just need to write up our Rev scripts and run them.

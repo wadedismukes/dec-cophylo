@@ -1680,7 +1680,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {28955, 23727}
+## Seeds = {35857, 23727}
 ## settings/0.05_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1703,7 +1703,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {28955, 23727}
+## Seeds = {35857, 23727}
 ## settings/0.1_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1726,7 +1726,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {28956, 23727}
+## Seeds = {35857, 23727}
 ## settings/0_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1749,7 +1749,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {28956, 23727}</code></pre>
+## Seeds = {35857, 23727}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1869,7 +1869,6 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
     ranges_suffix_fn &lt;- &quot;.range.nex&quot;
     
     for(i in 0:(reps-1)){
-        print(&quot;poop&quot;)   
         rev_out_fn &lt;- paste0(rev_script_dir,
                              str_sub(prefix_fn, end = -2L),
                                      &quot;/run_epoch_&quot;,
@@ -1931,7 +1930,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         #cat(&quot;rate_bg := 10^log10_rate_bg\n&quot;)
         #cat(&quot;moves.append( mvSlide(log10_rate_bg, weight=4) )\n&quot;)
 
-        cat(&quot;rate_bg &lt;- 1.0&quot;)
+        cat(&quot;rate_bg &lt;- 1.0\n&quot;)
 
         cat(&quot;log_sd &lt;- 0.5\n&quot;)
         cat(&quot;log_mean &lt;- ln(1) - 0.5*log_sd^2\n&quot;)
@@ -2034,46 +2033,6 @@ for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)
     print_rev_script(dir_name[i], prefix_fn[i], reps)
 }</code></pre>
-<pre><code>## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;
-## [1] &quot;poop&quot;</code></pre>
 <p>Now we just need to write up our Rev scripts and run them.</p>
 </div>
 </div>

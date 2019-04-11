@@ -308,7 +308,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         #cat("rate_bg := 10^log10_rate_bg\n")
         #cat("moves.append( mvSlide(log10_rate_bg, weight=4) )\n")
 
-	    cat("rate_bg <- 1.0")
+	    cat("rate_bg <- 1.0\n")
 
         cat("log_sd <- 0.5\n")
         cat("log_mean <- ln(1) - 0.5*log_sd^2\n")

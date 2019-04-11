@@ -1,7 +1,7 @@
-range_fn = "/work/LAS/phylo-lab/wade/dec-cophylo/data/0.05_hsrate/hsrate_0.05_1.range.nex"
-tree_fn = "/work/LAS/phylo-lab/wade/dec-cophylo/data/0.05_hsrate/hsrate_0.05_1_pruned_0.loc.tre"
-out_fn = "/work/LAS/phylo-lab/wade/dec-cophylo/data/0.05_hsrate/output/hsrate_0.05_1"
-geo_fn = "/work/LAS/phylo-lab/wade/dec-cophylo/data/0.05_hsrate/hsrate_0.05_1"
+range_fn = "data/0.05_hsrate/hsrate_0.05_1.range.nex"
+tree_fn = "data/0.05_hsrate/hsrate_0.05_1_pruned_0.loc.tre"
+out_fn = "data/0.05_hsrate/output/hsrate_0.05_1"
+geo_fn = "data/0.05_hsrate/hsrate_0.05_1"
 times_fn = geo_fn + ".times.txt"
 dist_fn  = geo_fn + ".distances.txt"
 moves = VectorMoves()
@@ -28,7 +28,8 @@ for (i in 1:n_epochs) {
 }
 distances <- readDataDelimitedFile(file=dist_fn, delimiter=" ")
 tree <- readTrees(tree_fn)[1]
-rate_bg <- 1.0log_sd <- 0.5
+rate_bg <- 1.0
+log_sd <- 0.5
 log_mean <- ln(1) - 0.5*log_sd^2
 dispersal_rate ~ dnLognormal(mean=log_mean, sd=log_sd)
 moves.append( mvScale(extirpation_rate, weight=5) )

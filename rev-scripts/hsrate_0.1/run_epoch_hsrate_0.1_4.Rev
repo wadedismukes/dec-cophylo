@@ -32,7 +32,7 @@ rate_bg <- 1.0
 log_sd <- 0.5
 log_mean <- ln(1) - 0.5*log_sd^2
 dispersal_rate ~ dnLognormal(mean=log_mean, sd=log_sd)
-moves.append( mvScale(extirpation_rate, weight=5) )
+moves.append( mvScale(dispersal_rate, weight=5) )
 for (i in 1:n_epochs) {
 	for (j in 1:n_areas) {
 		for (k in 1:n_areas) {
@@ -91,7 +91,7 @@ m_bg ~ dnPhyloCTMCClado(tree=tree,
                            type="NaturalNumbers",
                            nSites=1)
 m_bg.clamp(dat_range_n)
-monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate) )
+monitors.append( mnScreen(printgen=100, dispersal_rate, extirpation_rate) )
 monitors.append( mnModel(file=out_fn+".model.log", printgen=10) )
 monitors.append( mnFile(tree, filename=out_fn+".tre", printgen=10) )
 monitors.append( mnJointConditionalAncestralState(tree=tree,

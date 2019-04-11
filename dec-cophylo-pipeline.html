@@ -1680,7 +1680,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {35857, 23727}
+## Seeds = {37088, 23727}
 ## settings/0.05_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1703,7 +1703,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {35857, 23727}
+## Seeds = {37088, 23727}
 ## settings/0.1_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1726,7 +1726,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {35857, 23727}
+## Seeds = {37088, 23727}
 ## settings/0_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1749,7 +1749,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {35857, 23727}</code></pre>
+## Seeds = {37088, 23727}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1935,7 +1935,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         cat(&quot;log_sd &lt;- 0.5\n&quot;)
         cat(&quot;log_mean &lt;- ln(1) - 0.5*log_sd^2\n&quot;)
         cat(&quot;dispersal_rate ~ dnLognormal(mean=log_mean, sd=log_sd)\n&quot;)
-        cat(&quot;moves.append( mvScale(extirpation_rate, weight=5) )\n&quot;)
+        cat(&quot;moves.append( mvScale(dispersal_rate, weight=5) )\n&quot;)
 
         cat(&quot;for (i in 1:n_epochs) {\n&quot;)
         cat(&quot;\tfor (j in 1:n_areas) {\n&quot;)
@@ -2007,7 +2007,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         cat(&quot;m_bg.clamp(dat_range_n)\n&quot;)
         
         
-        cat(&quot;monitors.append( mnScreen(printgen=100, rate_bg, extirpation_rate) )\n&quot;)
+        cat(&quot;monitors.append( mnScreen(printgen=100, dispersal_rate, extirpation_rate) )\n&quot;)
         cat(&quot;monitors.append( mnModel(file=out_fn+\&quot;.model.log\&quot;, printgen=10) )\n&quot;)
         cat(&quot;monitors.append( mnFile(tree, filename=out_fn+\&quot;.tre\&quot;, printgen=10) )\n&quot;)
         cat(&quot;monitors.append( mnJointConditionalAncestralState(tree=tree,

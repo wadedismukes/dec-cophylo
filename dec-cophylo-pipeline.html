@@ -1613,8 +1613,8 @@ settings_writer &lt;- function(settings_list, file_begin){
 <p>Here I have set the model parameters to be printed into settings files at the top. The for loop generates the number of regimes I want to simulate under. The number of tips and timing (13 here corresponding to 13 million years ago (mya)) were chosen to mimic the Geomyidae gophers and their chewing lice parasites.</p>
 <pre class="r"><code>nt &lt;- 10
 turnover &lt;- 0.5
-br &lt;- 0.05
-dr &lt;- 0.025
+br &lt;- 0.06
+dr &lt;- 0.0
 trr &lt;- as.vector(c(0.0, 0.025, 0.05, 0.1))
 gbr &lt;- 0.0
 gdr &lt;- 0.0
@@ -1669,8 +1669,8 @@ done
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
-##      Species birth rate              = 0.05
-##      Species death rate              = 0.025
+##      Species birth rate              = 0.06
+##      Species death rate              = 0
 ##      Gene birth rate                 = 0
 ##      Gene death rate                 = 0
 ##      Gene transfer rate              = 0.025
@@ -1680,11 +1680,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-<<<<<<< HEAD
-## Seeds = {37088, 23727}
-=======
-## Seeds = {37022, 23727}
->>>>>>> 4c896ddc5421231cfe6c6796122110b840965f0b
+## Seeds = {60360, 23736}
 ## settings/0.05_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1696,8 +1692,8 @@ done
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
-##      Species birth rate              = 0.05
-##      Species death rate              = 0.025
+##      Species birth rate              = 0.06
+##      Species death rate              = 0
 ##      Gene birth rate                 = 0
 ##      Gene death rate                 = 0
 ##      Gene transfer rate              = 0.05
@@ -1707,11 +1703,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-<<<<<<< HEAD
-## Seeds = {37088, 23727}
-=======
-## Seeds = {37022, 23727}
->>>>>>> 4c896ddc5421231cfe6c6796122110b840965f0b
+## Seeds = {60360, 23736}
 ## settings/0.1_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1723,8 +1715,8 @@ done
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
-##      Species birth rate              = 0.05
-##      Species death rate              = 0.025
+##      Species birth rate              = 0.06
+##      Species death rate              = 0
 ##      Gene birth rate                 = 0
 ##      Gene death rate                 = 0
 ##      Gene transfer rate              = 0.1
@@ -1734,11 +1726,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-<<<<<<< HEAD
-## Seeds = {37088, 23727}
-=======
-## Seeds = {37022, 23727}
->>>>>>> 4c896ddc5421231cfe6c6796122110b840965f0b
+## Seeds = {60361, 23736}
 ## settings/0_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1750,8 +1738,8 @@ done
 ##      Number of replicates            = 10
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
-##      Species birth rate              = 0.05
-##      Species death rate              = 0.025
+##      Species birth rate              = 0.06
+##      Species death rate              = 0
 ##      Gene birth rate                 = 0
 ##      Gene death rate                 = 0
 ##      Gene transfer rate              = 0
@@ -1761,11 +1749,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-<<<<<<< HEAD
-## Seeds = {37088, 23727}</code></pre>
-=======
-## Seeds = {37022, 23727}</code></pre>
->>>>>>> 4c896ddc5421231cfe6c6796122110b840965f0b
+## Seeds = {60361, 23736}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>

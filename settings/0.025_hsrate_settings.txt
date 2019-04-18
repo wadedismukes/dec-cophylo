@@ -1,5 +1,5 @@
--sbr 0.05
--sdr 0.025
+-sbr 0.06
+-sdr 0
 -gbr 0
 -gdr 0
 -lgtr 0.025

@@ -47,8 +47,8 @@ chosen to mimic the Geomyidae gophers and their chewing lice parasites.
 ```{r}
 nt <- 10
 turnover <- 0.5
-br <- 0.05
-dr <- 0.025
+br <- 0.06
+dr <- 0.0
 trr <- as.vector(c(0.0, 0.025, 0.05, 0.1))
 gbr <- 0.0
 gdr <- 0.0

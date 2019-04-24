@@ -1,7 +1,7 @@
-range_fn = "/work/LAS/phylo-lab/wade/dec-cophylo/data/0.025_hsrate/hsrate_0.025_0.range.nex"
-tree_fn = "/work/LAS/phylo-lab/wade/dec-cophylo/data/0.025_hsrate/hsrate_0.025_0_pruned_0.loc.tre"
-out_fn = "/work/LAS/phylo-lab/wade/dec-cophylo/data/0.025_hsrate/output/hsrate_0.025_0"
-geo_fn = "/work/LAS/phylo-lab/wade/dec-cophylo/data/0.025_hsrate/hsrate_0.025_0"
+range_fn = "data/0.025_hsrate/hsrate_0.025_0.range.nex"
+tree_fn = "data/0.025_hsrate/hsrate_0.025_0_pruned_0.loc.tre"
+out_fn = "data/0.025_hsrate/output/hsrate_0.025_0"
+geo_fn = "data/0.025_hsrate/hsrate_0.025_0"
 times_fn = geo_fn + ".times.txt"
 dist_fn  = geo_fn + ".distances.txt"
 moves = VectorMoves()
@@ -104,4 +104,4 @@ monitors.append( mnJointConditionalAncestralState(tree=tree,
                                                         printgen=10) )
 mymodel = model(m_bg)
 mymcmc = mcmc(mymodel, monitors, moves)
-mymcmc.run(n_gen, underPrior = TRUE)
+mymcmc.run(n_gen)

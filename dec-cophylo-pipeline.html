@@ -1680,7 +1680,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {60360, 23736}
+## Seeds = {41956, 23744}
 ## settings/0.05_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1703,7 +1703,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {60360, 23736}
+## Seeds = {41956, 23744}
 ## settings/0.1_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1726,7 +1726,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {60361, 23736}
+## Seeds = {41956, 23744}
 ## settings/0_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1749,7 +1749,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {60361, 23736}</code></pre>
+## Seeds = {41956, 23744}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1966,7 +1966,8 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         cat(&quot;for (i in n_epochs:1) {\n&quot;)
         cat(&quot;Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
                                         extirpationRates=er[i],
-                                        maxRangeSize=max_areas)\n&quot;)
+                                        maxRangeSize=max_areas,
+                                        nullRange=\&quot;Exclude\&quot;)\n&quot;)
         cat(&quot;}\n&quot;)
 
         cat(&quot;for (i in 1:n_epochs) {\n&quot;)

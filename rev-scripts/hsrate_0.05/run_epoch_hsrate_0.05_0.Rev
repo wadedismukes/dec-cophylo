@@ -58,7 +58,8 @@ for (i in 1:n_epochs) {
 for (i in n_epochs:1) {
 Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
                                         extirpationRates=er[i],
-                                        maxRangeSize=max_areas)
+                                        maxRangeSize=max_areas,
+                                        nullRange="Exclude")
 }
 for (i in 1:n_epochs) {
 	time_max[i] <- time_bounds[i][1]

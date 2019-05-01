@@ -347,7 +347,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
                                         extirpationRates=er[i],
                                         maxRangeSize=max_areas,
-                                        nullRange=\"Exclude\")\n")
+                                        nullRange=\"Include\")\n")
         cat("}\n")
 
         cat("for (i in 1:n_epochs) {\n")

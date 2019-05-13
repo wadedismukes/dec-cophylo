@@ -235,7 +235,7 @@ display: none;
 padding: 0 4px 0 4px;
 }
 .pagedtable .even {
-background-color: #fcfcfc;
+background-color: rgba(140, 140, 140, 0.1);
 }
 .pagedtable-padding-col {
 display: none;
@@ -1525,9 +1525,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -1552,22 +1550,92 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
 });
 </script>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -1615,10 +1683,10 @@ settings_writer &lt;- function(settings_list, file_begin){
 turnover &lt;- 0.5
 br &lt;- 0.06
 dr &lt;- 0.0
-trr &lt;- as.vector(c(0.0, 0.025, 0.05, 0.1))
+trr &lt;- as.vector(c(0.0, 0.035, 0.1, 0.5))
 gbr &lt;- 0.0
 gdr &lt;- 0.0
-reps &lt;- 10
+reps &lt;- 50
 nl &lt;- 1
 ng &lt;- 1
 ipp &lt;- 1
@@ -1680,7 +1748,30 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {58748, 23753}
+## Seeds = {52323, 23769}
+## settings/0.035_hsrate_settings.txt
+## ############################################################
+## #### treeducken, version 0.1             ####
+## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
+## ############################################################
+## Gene birth rate is 0.0, locus trees will match species trees.
+##      output file name prefix         = hsrate_0.035
+##      Number of extant taxa           = 10
+##      Number of replicates            = 50
+##      Number of loci to simulate      = 1
+##      Number of genes to simulate     = 1
+##      Species birth rate              = 0.06
+##      Species death rate              = 0
+##      Gene birth rate                 = 0
+##      Gene death rate                 = 0
+##      Gene transfer rate              = 0.035
+##      Individuals to sample per locus = 1
+##      Effective pop size per locus    = 1
+##      Tree fraction to set outgroup   = 0
+##      Species tree input as newick    = 
+##      Tree scale                      = -1
+## 
+## Seeds = {52323, 23769}
 ## settings/0.05_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1703,7 +1794,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {58748, 23753}
+## Seeds = {52323, 23769}
 ## settings/0.1_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1712,7 +1803,7 @@ done
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0.1
 ##      Number of extant taxa           = 10
-##      Number of replicates            = 10
+##      Number of replicates            = 50
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
 ##      Species birth rate              = 0.06
@@ -1726,7 +1817,30 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {58748, 23753}
+## Seeds = {52323, 23769}
+## settings/0.5_hsrate_settings.txt
+## ############################################################
+## #### treeducken, version 0.1             ####
+## #### e845a82c08ba308f75f94a270b81a36870299b94    ####
+## ############################################################
+## Gene birth rate is 0.0, locus trees will match species trees.
+##      output file name prefix         = hsrate_0.5
+##      Number of extant taxa           = 10
+##      Number of replicates            = 50
+##      Number of loci to simulate      = 1
+##      Number of genes to simulate     = 1
+##      Species birth rate              = 0.06
+##      Species death rate              = 0
+##      Gene birth rate                 = 0
+##      Gene death rate                 = 0
+##      Gene transfer rate              = 0.5
+##      Individuals to sample per locus = 1
+##      Effective pop size per locus    = 1
+##      Tree fraction to set outgroup   = 0
+##      Species tree input as newick    = 
+##      Tree scale                      = -1
+## 
+## Seeds = {52323, 23769}
 ## settings/0_hsrate_settings.txt
 ## ############################################################
 ## #### treeducken, version 0.1             ####
@@ -1735,7 +1849,7 @@ done
 ## Gene birth rate is 0.0, locus trees will match species trees.
 ##      output file name prefix         = hsrate_0
 ##      Number of extant taxa           = 10
-##      Number of replicates            = 10
+##      Number of replicates            = 50
 ##      Number of loci to simulate      = 1
 ##      Number of genes to simulate     = 1
 ##      Species birth rate              = 0.06
@@ -1749,7 +1863,7 @@ done
 ##      Species tree input as newick    = 
 ##      Tree scale                      = -1
 ## 
-## Seeds = {58748, 23753}</code></pre>
+## Seeds = {52324, 23769}</code></pre>
 <div id="creating-extra-datafiles-for-use-with-dec-model" class="section level3">
 <h3>Creating extra datafiles for use with DEC model</h3>
 <p>With trees in hand, I need to make a few more files to run the epoch DEC model. I need to make a “range” file for the symbionts. To do this we need to parse the tips of the locus tree which is our stand-in for the symbiont tree. First, we need a couple of packages.</p>
@@ -1830,7 +1944,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         symb_nwck_tr &lt;- read.nexus(symb_fn)
         symb_nwck_tr$node.label &lt;- NULL
         pruned_symb_tree_fn &lt;- paste0(sim_dir, prefix_fn, i, &quot;_pruned&quot;, symb_tree_suffix_fn)
-        pruned_symb_tree &lt;- drop.tip(symb_nwck_tr, getExtinct(symb_nwck_tr, tol = 1e-3))
+        pruned_symb_tree &lt;- drop.tip(symb_nwck_tr,grep(&#39;X&#39;, symb_nwck_tr$tip.label, value = TRUE))
         write.nexus(pruned_symb_tree, file = pruned_symb_tree_fn, translate = FALSE)
 
         # print out epoch times (no uncertainty in age here)
@@ -1967,7 +2081,7 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
         cat(&quot;Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
                                         extirpationRates=er[i],
                                         maxRangeSize=max_areas,
-                                        nullRange=\&quot;Include\&quot;)\n&quot;)
+                                        nullRange=\&quot;CondSurv\&quot;)\n&quot;)
         cat(&quot;}\n&quot;)
 
         cat(&quot;for (i in 1:n_epochs) {\n&quot;)
@@ -2027,8 +2141,8 @@ nexus_range_print &lt;- function(fn, host_tree, symb_tree){
     }
 }</code></pre>
 <p>Now we can run this for each simulation regime.</p>
-<pre class="r"><code>dir_name &lt;- c(&quot;data/0_hsrate/&quot;, &quot;data/0.1_hsrate/&quot;, &quot;data/0.05_hsrate/&quot;, &quot;data/0.025_hsrate/&quot;)
-prefix_fn &lt;- c(&quot;hsrate_0_&quot;, &quot;hsrate_0.1_&quot;, &quot;hsrate_0.05_&quot;, &quot;hsrate_0.025_&quot;)
+<pre class="r"><code>dir_name &lt;- c(&quot;data/0_hsrate/&quot;, &quot;data/0.1_hsrate/&quot;, &quot;data/0.035_hsrate/&quot;, &quot;data/0.5_hsrate/&quot;)
+prefix_fn &lt;- c(&quot;hsrate_0_&quot;, &quot;hsrate_0.1_&quot;, &quot;hsrate_0.035_&quot;, &quot;hsrate_0.5_&quot;)
 
 for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)

@@ -49,10 +49,10 @@ nt <- 10
 turnover <- 0.5
 br <- 0.06
 dr <- 0.0
-trr <- as.vector(c(0.0, 0.025, 0.05, 0.1))
+trr <- as.vector(c(0.0, 0.035, 0.1, 0.5))
 gbr <- 0.0
 gdr <- 0.0
-reps <- 10
+reps <- 50
 nl <- 1
 ng <- 1
 ipp <- 1
@@ -205,7 +205,7 @@ run_sim_regime <- function(sim_dir, prefix_fn, num_reps){
         symb_nwck_tr <- read.nexus(symb_fn)
         symb_nwck_tr$node.label <- NULL
         pruned_symb_tree_fn <- paste0(sim_dir, prefix_fn, i, "_pruned", symb_tree_suffix_fn)
-        pruned_symb_tree <- drop.tip(symb_nwck_tr, getExtinct(symb_nwck_tr, tol = 1e-3))
+        pruned_symb_tree <- drop.tip(symb_nwck_tr,grep('X', symb_nwck_tr$tip.label, value = TRUE))
         write.nexus(pruned_symb_tree, file = pruned_symb_tree_fn, translate = FALSE)
 
         # print out epoch times (no uncertainty in age here)
@@ -347,7 +347,7 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
         cat("Q_DEC[i] := fnDECRateMatrix(dispersalRates=dr[i],
                                         extirpationRates=er[i],
                                         maxRangeSize=max_areas,
-                                        nullRange=\"Include\")\n")
+                                        nullRange=\"CondSurv\")\n")
         cat("}\n")
 
         cat("for (i in 1:n_epochs) {\n")
@@ -413,8 +413,8 @@ print_rev_script <- function(dir_name, prefix_fn, reps){
 Now we can run this for each simulation regime. 
 
 ```{r print-data-files-and-scripts}
-dir_name <- c("data/0_hsrate/", "data/0.1_hsrate/", "data/0.05_hsrate/", "data/0.025_hsrate/")
-prefix_fn <- c("hsrate_0_", "hsrate_0.1_", "hsrate_0.05_", "hsrate_0.025_")
+dir_name <- c("data/0_hsrate/", "data/0.1_hsrate/", "data/0.035_hsrate/", "data/0.5_hsrate/")
+prefix_fn <- c("hsrate_0_", "hsrate_0.1_", "hsrate_0.035_", "hsrate_0.5_")
 
 for(i in 1:length(dir_name)){
     run_sim_regime(dir_name[i], prefix_fn[i], reps)
